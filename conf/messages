@@ -1,0 +1,11 @@
+# Common messages across views
+common.start        = Start
+
+# Navigation bar
+navigation.homeText = D&D5e World Generator
+
+# Home
+home.title          = Start creating your D&D world
+home.header         = Start creating your D&D world
+home.info           = This is currently a prototype. Comments and suggestions are welcome.
+home.para1          = This tool will not simulate your world with events taking place. That is what the DM will need to do and keep track of. This tool is for cataloging things within your D&D world and providing quick methods of adding more to that world
