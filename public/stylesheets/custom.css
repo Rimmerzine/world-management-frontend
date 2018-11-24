@@ -1,0 +1,20 @@
+.navbar-buffer {
+  margin-top:80px
+}
+
+body {
+  background-color: #aaaab5 !important;
+}
+
+.light-gray {
+  background-color: #ededed !important;
+}
+
+#content-container {
+  padding: 2%;
+}
+
+h1 {
+  padding-top: 1%;
+  padding-bottom: 2%;
+}

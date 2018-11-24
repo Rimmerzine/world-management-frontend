@@ -1,0 +1,38 @@
+@(title: String)(content: Html)(implicit messagesProvider: MessagesProvider)
+
+@import messagesProvider.messages
+
+<!DOCTYPE html>
+<html lang="en">
+
+  @*Header data*@
+  <head>
+    <title id="title">@messagesProvider.messages(title)</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/bootstrap.css")">
+    <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/custom.css")">
+  </head>
+
+  @*Main content shown on every page*@
+  <body id="body">
+
+    @*Navigation bar*@
+    <nav id="navigation-bar" class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+      <a id="navigation-home" class="navbar-brand" href="/">@messages("navigation.homeText")</a>
+    </nav>
+
+    @*Individual content for each page*@
+    <div id="body-container" class="navbar-buffer container-fluid">
+      <div id="body-row" class="row justify-content-center">
+        <div id="centre-block" class="col-8 light-gray rounded">
+          <div id="content-container" class="container-fluid">
+            @content
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+
+</html>
