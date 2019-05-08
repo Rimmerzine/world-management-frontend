@@ -4,15 +4,16 @@
 
 @main_template("home.title") {
 
-  <h1 id="header">@messages("home.header")</h1>
+  <h1 id="heading">@messages("home.header")</h1>
 
   <p>@messages("home.info")</p>
 
   <p>@messages("home.para1")</p>
 
-  @helper.form(action = controllers.routes.HomeController.start()) {
+  @helper.form(action = controllers.routes.HomeController.start(), args = 'id -> "home-form") {
     <div class="form-group">
-      <input type="submit" class="btn btn-success" value="@messages("common.start")">
+      <input type='submit' class='btn btn-success' value='@messages("common.start")'>
     </div>
   }
+
 }
