@@ -1,4 +1,4 @@
-name := "WorldManagement"
+name := "world-management-frontend"
  
 version := "0.1"
 
