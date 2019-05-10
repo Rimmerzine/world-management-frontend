@@ -5,7 +5,7 @@ version := "0.1"
 lazy val scalaTest: ModuleID = "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.2"
 lazy val jsoup: ModuleID = "org.jsoup" % "jsoup" % "1.11.3"
       
-lazy val `worldmanagement` = (project in file("."))
+lazy val `world-management-frontend` = (project in file("."))
   .enablePlugins(PlayScala)
   .configs(IntegrationTest)
   .settings(
