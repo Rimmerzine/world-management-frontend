@@ -22,6 +22,7 @@ trait ViewSpec extends UnitSpec {
     def getElementById(id: String): Option[Element] = Option(document.getElementById(id))
     def getTextOfElementById(id: String): Option[String] = getElementById(id).map(_.text)
     def getAttrOfElementById(id: String, attribute: String): Option[String] = getElementById(id).map(_.attr(attribute))
+    def getHrefById(id: String): Option[String] = getElementById(id).map(_.attr("href"))
 
   }
 
