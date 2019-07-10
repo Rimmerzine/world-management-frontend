@@ -1,11 +1,20 @@
-#Index
-GET     /                             controllers.IndexController.index()
-
 #Assets
-GET     /assets/*file                 controllers.Assets.versioned(file)
+GET     /assets/*file                                   controllers.Assets.versioned(file)
 
-#Home
-GET     /start                        controllers.HomeController.show()
-POST    /start                        controllers.HomeController.start()
+#Index
+GET     /                                               controllers.IndexController.index()
 
-      
+#Select Campaign
+GET     /dnd-world-management/select-campaign           controllers.SelectCampaignController.show()
+
+#Create Campaign
+GET     /dnd-world-management/create-campaign           controllers.CreateCampaignController.show()
+POST    /dnd-world-management/create-campaign           controllers.CreateCampaignController.submit()
+
+#Edit Campaign
+GET     /dnd-world-management/edit-campaign/:id         controllers.EditCampaignController.show(id)
+POST    /dnd-world-management/edit-campaign/:id         controllers.EditCampaignController.submit(id)
+
+#Delete Campaign
+GET     /dnd-world-management/delete-campaign/:id       controllers.DeleteCampaignController.show(id)
+POST    /dnd-world-management/delete-campaign/:id       controllers.DeleteCampaignController.submit(id)

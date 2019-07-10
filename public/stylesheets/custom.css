@@ -112,3 +112,11 @@ details {
 #remove-type-tag-button, #remove-language-button, #remove-trait-button, #remove-action-button, #remove-legendary-action-button {
     display: none
 }
+
+.btn-success {
+    background-color: #35852e
+}
+
+a {
+    color: #0467d5
+}
