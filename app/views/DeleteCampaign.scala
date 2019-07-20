@@ -35,7 +35,7 @@ trait DeleteCampaign extends MainTemplate {
     ),
     div(cls := "form-group")(
       form(action := controllers.routes.DeleteCampaignController.submit(campaign.id).url, method := "POST")(
-        button(id := "confirm-button", cls := "btn btn-success", aria.label := messages("delete-campaign.confirm.aria-label"))(messages("common.confirm"))
+        button(cls := "btn btn-success", aria.label := messages("delete-campaign.confirm.aria-label"))(messages("common.confirm"))
       )
     )
   )

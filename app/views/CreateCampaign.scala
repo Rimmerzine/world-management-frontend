@@ -30,7 +30,7 @@ trait CreateCampaign extends MainTemplate with InputTextWithLabel with TextAreaW
         textAreaWithLabel(campaignForm(campaignDescription), campaignDescription, campaignDescription, messages("create-campaign.description.label"))
       ),
       div(cls := "form-group")(
-        button(id := "create-button", cls := "btn btn-success", aria.label := messages("create-campaign.create.aria-label"))(messages("common.save"))
+        button(cls := "btn btn-success", aria.label := messages("create-campaign.create.aria-label"))(messages("common.create"))
       )
     )
   )

@@ -30,7 +30,7 @@ trait EditCampaign extends MainTemplate with InputTextWithLabel with TextAreaWit
         textAreaWithLabel(campaignForm(campaignDescription), campaignDescription, campaignDescription, messages("edit-campaign.description.label"))
       ),
       div(cls := "form-group")(
-        button(id := "edit-button", cls := "btn btn-success", aria.label := messages("edit-campaign.edit.aria-label"))(messages("common.save"))
+        button(cls := "btn btn-success", aria.label := messages("edit-campaign.save.aria-label"))(messages("common.save"))
       )
     )
   )
