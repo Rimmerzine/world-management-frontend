@@ -1,10 +1,11 @@
-package views
+package views.campaigns
 
 import _root_.models.Campaign
 import config.AppConfig
 import javax.inject.Inject
 import play.api.i18n.{Langs, Messages, MessagesApi, MessagesImpl}
 import scalatags.Text.all._
+import views.MainTemplate
 import views.helpers.Card
 import views.models.CardLink
 

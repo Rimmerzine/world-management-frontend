@@ -9,7 +9,7 @@ import play.api.i18n.MessagesProvider
 import play.api.mvc._
 import services.CampaignService
 import utils.ErrorModel.CampaignNotFound
-import views.EditCampaign
+import views.campaigns.EditCampaign
 import views.errors.{InternalServerError, NotFound}
 
 import scala.concurrent.{ExecutionContext, Future}

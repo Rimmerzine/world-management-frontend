@@ -4,8 +4,8 @@ import com.google.inject.AbstractModule
 import connectors.{CampaignConnector, CampaignConnectorImpl}
 import controllers._
 import services.{CampaignService, CampaignServiceImpl}
-import views.errors.{InternalServerError, InternalServerErrorImpl, NotFound, NotFoundImpl, OtherError, OtherErrorImpl}
-import views.{CreateCampaign, CreateCampaignImpl, DeleteCampaign, DeleteCampaignImpl, EditCampaign, EditCampaignImpl, SelectCampaign, SelectCampaignImpl}
+import views.campaigns._
+import views.errors._
 
 class Module extends AbstractModule {
 

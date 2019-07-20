@@ -1,12 +1,13 @@
-package views
+package views.campaigns
 
 import config.AppConfig
+import forms.CampaignForm.{campaignDescription, campaignName}
 import javax.inject.Inject
 import play.api.data.Form
 import play.api.i18n.{Langs, Messages, MessagesApi, MessagesImpl}
 import scalatags.Text.all._
+import views.MainTemplate
 import views.helpers.inputs.{InputTextWithLabel, TextAreaWithLabel}
-import forms.CampaignForm.{campaignDescription, campaignName}
 
 class EditCampaignImpl @Inject()(messagesApi: MessagesApi, langs: Langs, val appConfig: AppConfig) extends EditCampaign {
 

@@ -4,7 +4,7 @@ import config.AppConfig
 import javax.inject.Inject
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import services.CampaignService
-import views.SelectCampaign
+import views.campaigns.SelectCampaign
 import views.errors.InternalServerError
 
 import scala.concurrent.ExecutionContext

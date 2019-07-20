@@ -5,7 +5,7 @@ import javax.inject.Inject
 import play.api.mvc._
 import services.CampaignService
 import utils.ErrorModel.CampaignNotFound
-import views.DeleteCampaign
+import views.campaigns.DeleteCampaign
 import views.errors.{InternalServerError, NotFound}
 
 import scala.concurrent.ExecutionContext
