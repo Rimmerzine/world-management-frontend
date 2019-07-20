@@ -8,7 +8,7 @@ import play.api.data.Form
 import play.api.i18n.MessagesProvider
 import play.api.mvc._
 import services.CampaignService
-import views.CreateCampaign
+import views.campaigns.CreateCampaign
 import views.errors.InternalServerError
 
 import scala.concurrent.{ExecutionContext, Future}

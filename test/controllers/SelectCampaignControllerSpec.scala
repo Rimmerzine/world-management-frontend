@@ -10,7 +10,7 @@ import play.api.test.{FakeRequest, Helpers}
 import services.CampaignService
 import utils.ErrorModel.UnexpectedStatus
 import utils.TestConstants
-import views.SelectCampaign
+import views.campaigns.SelectCampaign
 import views.errors.InternalServerError
 
 import scala.concurrent.Future

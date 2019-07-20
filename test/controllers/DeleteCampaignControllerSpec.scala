@@ -10,7 +10,7 @@ import play.api.test.{FakeRequest, Helpers}
 import services.CampaignService
 import utils.ErrorModel.{CampaignNotFound, UnexpectedStatus}
 import utils.TestConstants
-import views.DeleteCampaign
+import views.campaigns.DeleteCampaign
 import views.errors.{InternalServerError, NotFound}
 
 import scala.concurrent.Future

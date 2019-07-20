@@ -11,7 +11,7 @@ import play.api.test.{FakeRequest, Helpers}
 import services.CampaignService
 import utils.ErrorModel.{CampaignNotFound, UnexpectedStatus}
 import utils.TestConstants
-import views.EditCampaign
+import views.campaigns.EditCampaign
 import views.errors.{InternalServerError, NotFound}
 
 import scala.concurrent.Future
