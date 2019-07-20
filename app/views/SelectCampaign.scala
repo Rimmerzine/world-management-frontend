@@ -23,9 +23,10 @@ trait SelectCampaign extends MainTemplate with Card {
     h1(cls := "text-center")(messages("select-campaign.heading")),
     h2(cls := "text-center")(messages("select-campaign.subheading")),
     div(cls := "form-group")(
-      a(cls := "btn btn-success btn-block", `type` := "button", href := controllers.routes.CreateCampaignController.show().url)(
-        messages("select-campaign.create")
+      form(action := controllers.routes.CreateCampaignController.show().url, method := "GET")(
+        button(cls := "btn btn-success btn-block")(messages("select-campaign.create"))
       )
+
     ),
     div(cls := "row")(
       for (campaign <- campaigns) yield div(cls := "col-lg-4")(card(

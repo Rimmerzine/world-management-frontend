@@ -11,7 +11,7 @@ trait Card {
     optBody.map(div(cls := "card-body")(_)),
     links.headOption.map { _ =>
       div(cls := "card-footer text-center")(
-        for (cardLink <- links) yield a(cls := "card-link", href := cardLink.href, aria.label := s"${cardLink.ariaLabel}")(cardLink.text)
+        for (cardLink <- links) yield a(cls := "card-link", href := cardLink.href, cardLink.ariaLabel.map(aria.label := _))(cardLink.text)
       )
     }
   )
