@@ -21,7 +21,6 @@ trait SelectCampaign extends MainTemplate with Card {
 
   def apply(campaigns: List[Campaign]): String = mainTemplate(messages("select-campaign.title"))(
     h1(cls := "text-center")(messages("select-campaign.heading")),
-    h2(cls := "text-center")(messages("select-campaign.subheading")),
     div(cls := "form-group")(
       form(action := controllers.routes.CreateCampaignController.show().url, method := "GET")(
         button(cls := "btn btn-success btn-block")(messages("select-campaign.create"))

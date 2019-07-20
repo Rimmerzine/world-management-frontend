@@ -16,9 +16,8 @@ navbar.bottom.toggle.aria = Toggle navigation
 navbar.bottom.github = Github
 
 # Select campaign
-select-campaign.title = Select a campaign
-select-campaign.heading = Select a campaign
-select-campaign.subheading = Select a campaign from the following:
+select-campaign.title = Campaigns
+select-campaign.heading = Campaigns
 select-campaign.create = Create a new campaign
 select-campaign.view = View
 select-campaign.view-aria = View ({0})
