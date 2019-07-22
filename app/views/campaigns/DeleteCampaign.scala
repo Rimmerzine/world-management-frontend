@@ -23,18 +23,18 @@ trait DeleteCampaign extends MainTemplate {
     h2(cls := "header-medium")(messages("delete-campaign.subheading")),
     div(cls := "form-group")(
       p(
-        span(cls := "font-weight-bold")(messages("delete-campaign.name")),
+        span(cls := "font-weight-bold")(messages("delete-campaign.name"))(" "),
         span(campaign.name)
       ),
       campaign.description.map { description =>
         p(
-          span(cls := "font-weight-bold")(messages("delete-campaign.description")),
+          span(cls := "font-weight-bold")(messages("delete-campaign.description"))(" "),
           span(description)
         )
       }
     ),
     div(cls := "form-group")(
-      form(action := controllers.routes.DeleteCampaignController.submit(campaign.id).url, method := "POST")(
+      form(action := controllers.campaigns.routes.DeleteCampaignController.submit(campaign.id).url, method := "POST")(
         button(cls := "btn btn-success", aria.label := messages("delete-campaign.confirm.aria-label"))(messages("common.confirm"))
       )
     )

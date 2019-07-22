@@ -23,7 +23,7 @@ trait EditCampaign extends MainTemplate with InputTextWithLabel with TextAreaWit
   def apply(campaignForm: Form[(String, Option[String])], campaignId: String): String = mainTemplate(messages("edit-campaign.title"), "8")(
     h1(messages("edit-campaign.heading")),
     h2(cls := "header-medium")(messages("edit-campaign.subheading")),
-    form(action := controllers.routes.EditCampaignController.submit(campaignId).url, method := "POST")(
+    form(action := controllers.campaigns.routes.EditCampaignController.submit(campaignId).url, method := "POST")(
       div(cls := "form-group")(
         inputTextWithLabel(campaignForm(campaignName), campaignName, campaignName, messages("edit-campaign.name.label"))
       ),

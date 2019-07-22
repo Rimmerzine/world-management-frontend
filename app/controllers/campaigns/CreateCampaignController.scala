@@ -1,6 +1,7 @@
-package controllers
+package controllers.campaigns
 
 import config.AppConfig
+import controllers.FrontendController
 import forms.CampaignForm
 import javax.inject.Inject
 import models.Campaign
@@ -47,7 +48,7 @@ trait CreateCampaignController extends FrontendController {
     val newCampaign: Campaign = Campaign.create(name, description)
     campaignService.createCampaign(newCampaign).map {
       case Left(_) => InternalServerError(internalServerError()).as("text/html")
-      case Right(_) => Redirect(controllers.routes.SelectCampaignController.show())
+      case Right(_) => Redirect(controllers.planes.routes.SelectPlaneController.show(newCampaign.id))
     }
   }
 

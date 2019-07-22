@@ -1,4 +1,4 @@
-package controllers
+package controllers.campaigns
 
 import config.AppConfig
 import helpers.UnitSpec
@@ -40,7 +40,7 @@ class SelectCampaignControllerSpec extends UnitSpec with TestConstants {
         when(mockCampaignService.retrieveAllCampaigns(any())) thenReturn Future.successful(Right(List(testCampaign, testCampaignMinimal)))
         when(mockSelectCampaign(List(testCampaign, testCampaignMinimal))) thenReturn emptyHtml
 
-        val result: Future[Result] = controller.show()(FakeRequest())
+        val result: Future[Result] = controller.show(FakeRequest())
         status(result) mustBe OK
         contentType(result) mustBe Some("text/html")
       }
@@ -51,7 +51,7 @@ class SelectCampaignControllerSpec extends UnitSpec with TestConstants {
         when(mockCampaignService.retrieveAllCampaigns(any())) thenReturn Future.successful(Left(UnexpectedStatus))
         when(mockInternalServerError()) thenReturn emptyHtml
 
-        val result: Future[Result] = controller.show()(FakeRequest())
+        val result: Future[Result] = controller.show(FakeRequest())
         status(result) mustBe INTERNAL_SERVER_ERROR
         contentType(result) mustBe Some("text/html")
       }

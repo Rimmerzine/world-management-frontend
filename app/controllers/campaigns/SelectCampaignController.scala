@@ -1,6 +1,7 @@
-package controllers
+package controllers.campaigns
 
 import config.AppConfig
+import controllers.FrontendController
 import javax.inject.Inject
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import services.CampaignService

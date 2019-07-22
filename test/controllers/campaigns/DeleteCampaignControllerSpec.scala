@@ -1,36 +1,35 @@
-package controllers
+package controllers.campaigns
 
 import config.AppConfig
-import forms.CampaignForm
 import helpers.UnitSpec
 import org.mockito.ArgumentMatchers.{any, eq => matches}
 import org.mockito.Mockito.when
-import play.api.mvc.{AnyContentAsFormUrlEncoded, ControllerComponents, Result}
+import play.api.mvc.{ControllerComponents, Result}
 import play.api.test.Helpers._
 import play.api.test.{FakeRequest, Helpers}
 import services.CampaignService
 import utils.ErrorModel.{CampaignNotFound, UnexpectedStatus}
 import utils.TestConstants
-import views.campaigns.EditCampaign
+import views.campaigns.DeleteCampaign
 import views.errors.{InternalServerError, NotFound}
 
 import scala.concurrent.Future
 
-class EditCampaignControllerSpec extends UnitSpec with TestConstants {
+class DeleteCampaignControllerSpec extends UnitSpec with TestConstants {
 
   trait Setup {
 
     val mockCampaignService: CampaignService = mock[CampaignService]
     val mockAppConfig: AppConfig = mock[AppConfig]
-    val mockEditCampaign: EditCampaign = mock[EditCampaign]
+    val mockDeleteCampaign: DeleteCampaign = mock[DeleteCampaign]
     val mockInternalServerError: InternalServerError = mock[InternalServerError]
     val mockNotFound: NotFound = mock[NotFound]
 
-    val controller: EditCampaignController = new EditCampaignController {
+    val controller: DeleteCampaignController = new DeleteCampaignController {
       val controllerComponents: ControllerComponents = Helpers.stubControllerComponents()
       val campaignService: CampaignService = mockCampaignService
       implicit val appConfig: AppConfig = mockAppConfig
-      val editCampaign: EditCampaign = mockEditCampaign
+      val deleteCampaign: DeleteCampaign = mockDeleteCampaign
       val internalServerError: InternalServerError = mockInternalServerError
       val notFound: NotFound = mockNotFound
     }
@@ -39,9 +38,9 @@ class EditCampaignControllerSpec extends UnitSpec with TestConstants {
 
   "show" must {
     s"return $OK" when {
-      "a campaign was returned from the service" in new Setup {
+      "a campaign is returned from the service" in new Setup {
         when(mockCampaignService.retrieveSingleCampaign(matches(testCampaign.id))(any())) thenReturn Future.successful(Right(testCampaign))
-        when(mockEditCampaign(any(), matches(testCampaign.id))) thenReturn emptyHtml
+        when(mockDeleteCampaign.apply(matches(testCampaign))) thenReturn emptyHtml
 
         val result: Future[Result] = controller.show(testCampaign.id)(FakeRequest())
         status(result) mustBe OK
@@ -49,9 +48,9 @@ class EditCampaignControllerSpec extends UnitSpec with TestConstants {
       }
     }
     s"return $NOT_FOUND" when {
-      "CampaignNotFound was returned from the service" in new Setup {
+      "a CampaignNotFound is returned from the service" in new Setup {
         when(mockCampaignService.retrieveSingleCampaign(matches(testCampaign.id))(any())) thenReturn Future.successful(Left(CampaignNotFound))
-        when(mockNotFound()) thenReturn emptyHtml
+        when(mockNotFound.apply()) thenReturn emptyHtml
 
         val result: Future[Result] = controller.show(testCampaign.id)(FakeRequest())
         status(result) mustBe NOT_FOUND
@@ -71,27 +70,12 @@ class EditCampaignControllerSpec extends UnitSpec with TestConstants {
   }
 
   "submit" must {
-    s"return $BAD_REQUEST" when {
-      "the form had errors" in new Setup {
-        when(mockEditCampaign(any(), matches(testCampaign.id))) thenReturn emptyHtml
-
-        val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody()
-        val result: Future[Result] = controller.submit(testCampaign.id)(request)
-
-        status(result) mustBe BAD_REQUEST
-        contentType(result) mustBe Some("text/html")
-      }
-    }
     s"return $NOT_FOUND" when {
-      "CampaignNotFound is returned from the service" in new Setup {
-        when(mockCampaignService.updateCampaign(matches(testCampaign))(any())) thenReturn Future.successful(Left(CampaignNotFound))
+      "CampaignNotFound was returned from the service" in new Setup {
+        when(mockCampaignService.removeCampaign(matches(testCampaign.id))(any())) thenReturn Future.successful(Left(CampaignNotFound))
         when(mockNotFound()) thenReturn emptyHtml
 
-        val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody(
-          CampaignForm.campaignName -> testCampaignName,
-          CampaignForm.campaignDescription -> testCampaignDescription
-        )
-        val result: Future[Result] = controller.submit(testCampaign.id)(request)
+        val result: Future[Result] = controller.submit(testCampaign.id)(FakeRequest())
 
         status(result) mustBe NOT_FOUND
         contentType(result) mustBe Some("text/html")
@@ -99,14 +83,10 @@ class EditCampaignControllerSpec extends UnitSpec with TestConstants {
     }
     s"return $INTERNAL_SERVER_ERROR" when {
       "any other error is returned from the service" in new Setup {
-        when(mockCampaignService.updateCampaign(matches(testCampaign))(any())) thenReturn Future.successful(Left(UnexpectedStatus))
+        when(mockCampaignService.removeCampaign(matches(testCampaign.id))(any())) thenReturn Future.successful(Left(UnexpectedStatus))
         when(mockInternalServerError()) thenReturn emptyHtml
 
-        val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody(
-          CampaignForm.campaignName -> testCampaignName,
-          CampaignForm.campaignDescription -> testCampaignDescription
-        )
-        val result: Future[Result] = controller.submit(testCampaign.id)(request)
+        val result: Future[Result] = controller.submit(testCampaign.id)(FakeRequest())
 
         status(result) mustBe INTERNAL_SERVER_ERROR
         contentType(result) mustBe Some("text/html")
@@ -114,16 +94,12 @@ class EditCampaignControllerSpec extends UnitSpec with TestConstants {
     }
     s"return $SEE_OTHER" when {
       "the campaign was created" in new Setup {
-        when(mockCampaignService.updateCampaign(matches(testCampaign))(any())) thenReturn Future.successful(Right(testCampaign))
+        when(mockCampaignService.removeCampaign(matches(testCampaign.id))(any())) thenReturn Future.successful(Right(testCampaign))
 
-        val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody(
-          CampaignForm.campaignName -> testCampaignName,
-          CampaignForm.campaignDescription -> testCampaignDescription
-        )
-        val result: Future[Result] = controller.submit(testCampaign.id)(request)
+        val result: Future[Result] = controller.submit(testCampaign.id)(FakeRequest())
 
         status(result) mustBe SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.SelectCampaignController.show().url)
+        redirectLocation(result) mustBe Some(controllers.campaigns.routes.SelectCampaignController.show().url)
       }
     }
   }

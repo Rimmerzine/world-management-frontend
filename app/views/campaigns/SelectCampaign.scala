@@ -23,7 +23,7 @@ trait SelectCampaign extends MainTemplate with Card {
   def apply(campaigns: List[Campaign]): String = mainTemplate(messages("select-campaign.title"))(
     h1(cls := "text-center")(messages("select-campaign.heading")),
     div(cls := "form-group")(
-      form(action := controllers.routes.CreateCampaignController.show().url, method := "GET")(
+      form(action := controllers.campaigns.routes.CreateCampaignController.show().url, method := "GET")(
         button(cls := "btn btn-success btn-block")(messages("select-campaign.create"))
       )
 
@@ -35,17 +35,17 @@ trait SelectCampaign extends MainTemplate with Card {
         List(
           CardLink(
             messages("select-campaign.view"),
-            s"/???",
+            controllers.planes.routes.SelectPlaneController.show(campaign.id).url,
             Some(messages("select-campaign.view-aria", campaign.name))
           ),
           CardLink(
             messages("select-campaign.edit"),
-            controllers.routes.EditCampaignController.show(campaign.id).url,
+            controllers.campaigns.routes.EditCampaignController.show(campaign.id).url,
             Some(messages("select-campaign.edit-aria", campaign.name))
           ),
           CardLink(
             messages("select-campaign.delete"),
-            controllers.routes.DeleteCampaignController.show(campaign.id).url,
+            controllers.campaigns.routes.DeleteCampaignController.show(campaign.id).url,
             Some(messages("select-campaign.delete-aria", campaign.name))
           )
         )

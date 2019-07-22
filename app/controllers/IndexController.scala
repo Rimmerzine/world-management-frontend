@@ -8,7 +8,7 @@ class IndexControllerImpl @Inject()(val controllerComponents: ControllerComponen
 trait IndexController extends FrontendController {
 
   val index: Action[AnyContent] = Action { implicit request =>
-    Redirect(controllers.routes.SelectCampaignController.show())
+    Redirect(controllers.campaigns.routes.SelectCampaignController.show())
   }
 
 }
