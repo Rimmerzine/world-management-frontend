@@ -1,20 +1,35 @@
 #Assets
-GET     /assets/*file                                   controllers.Assets.versioned(file)
+GET     /assets/*file                                                           controllers.Assets.versioned(file)
 
 #Index
-GET     /                                               controllers.IndexController.index()
+GET     /                                                                       controllers.IndexController.index()
 
 #Select Campaign
-GET     /dnd-world-management/select-campaign           controllers.SelectCampaignController.show()
+GET     /dnd-world-management/select-campaign                                   controllers.campaigns.SelectCampaignController.show()
 
 #Create Campaign
-GET     /dnd-world-management/create-campaign           controllers.CreateCampaignController.show()
-POST    /dnd-world-management/create-campaign           controllers.CreateCampaignController.submit()
+GET     /dnd-world-management/create-campaign                                   controllers.campaigns.CreateCampaignController.show()
+POST    /dnd-world-management/create-campaign                                   controllers.campaigns.CreateCampaignController.submit()
 
 #Edit Campaign
-GET     /dnd-world-management/edit-campaign/:id         controllers.EditCampaignController.show(id)
-POST    /dnd-world-management/edit-campaign/:id         controllers.EditCampaignController.submit(id)
+GET     /dnd-world-management/edit-campaign/:campaignId                         controllers.campaigns.EditCampaignController.show(campaignId)
+POST    /dnd-world-management/edit-campaign/:campaignId                         controllers.campaigns.EditCampaignController.submit(campaignId)
 
 #Delete Campaign
-GET     /dnd-world-management/delete-campaign/:id       controllers.DeleteCampaignController.show(id)
-POST    /dnd-world-management/delete-campaign/:id       controllers.DeleteCampaignController.submit(id)
+GET     /dnd-world-management/delete-campaign/:campaignId                       controllers.campaigns.DeleteCampaignController.show(campaignId)
+POST    /dnd-world-management/delete-campaign/:campaignId                       controllers.campaigns.DeleteCampaignController.submit(campaignId)
+
+#Select Plane
+GET     /dnd-world-management/campaign/:campaignId/select-plane                 controllers.planes.SelectPlaneController.show(campaignId)
+
+#Create Plane
+GET     /dnd-world-management/campaign/:campaignId/create-plane                 controllers.planes.CreatePlaneController.show(campaignId)
+POST    /dnd-world-management/campaign/:campaignId/create-plane                 controllers.planes.CreatePlaneController.submit(campaignId)
+
+#Edit Campaign
+GET     /dnd-world-management/edit-plane/:planeId                               controllers.planes.EditPlaneController.show(planeId)
+POST    /dnd-world-management/edit-plane/:planeId                               controllers.planes.EditPlaneController.submit(planeId)
+
+#Delete Campaign
+GET     /dnd-world-management/delete-plane/:planeId                             controllers.planes.DeletePlaneController.show(planeId)
+POST    /dnd-world-management/delete-plane/:planeId                             controllers.planes.DeletePlaneController.submit(planeId)

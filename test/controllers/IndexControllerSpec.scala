@@ -19,7 +19,7 @@ class IndexControllerSpec extends UnitSpec {
     "redirect the user to the home page" in new Setup {
       val result: Future[Result] = controller.index()(FakeRequest())
       status(result) mustBe 303
-      redirectLocation(result) mustBe Some(controllers.routes.SelectCampaignController.show().url)
+      redirectLocation(result) mustBe Some(controllers.campaigns.routes.SelectCampaignController.show().url)
     }
   }
 }

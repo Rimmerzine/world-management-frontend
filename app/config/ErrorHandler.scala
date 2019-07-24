@@ -30,8 +30,6 @@ class ErrorHandler @Inject()(
     }
   }
 
-
-
   def onServerError(request: RequestHeader, exception: Throwable): Future[Result] = {
     logger.error(s"[onServerError] Error occurred which was not recovered from. Url: ${request.uri}", exception)
     Future.successful(

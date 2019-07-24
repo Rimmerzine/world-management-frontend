@@ -50,9 +50,9 @@ trait CampaignConnector extends Logging {
           },
           valid => Right(valid)
         )
-        case NOT_FOUND => logger.warn(s"[retrieveAllCampaigns] Campaign was not found in the backend. Campaign Id: $campaignId")
+        case NOT_FOUND => logger.warn(s"[retrieveSingleCampaign] Campaign was not found in the backend. Campaign Id: $campaignId")
           Left(CampaignNotFound)
-        case _ => logger.error(s"[retrieveAllCampaigns] Unexpected status returned from the backend. Status = ${response.status}")
+        case _ => logger.error(s"[retrieveSingleCampaign] Unexpected status returned from the backend. Status = ${response.status}")
           Left(UnexpectedStatus)
       }
     }

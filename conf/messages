@@ -50,6 +50,56 @@ delete-campaign.name = Name:
 delete-campaign.description = Description:
 delete-campaign.confirm.aria-label = Delete this campaign
 
+# Select Plane
+select-plane.title = Planes in ''{0}''
+select-plane.heading = Planes in ''{0}''
+select-plane.create = Create a new plane
+select-plane.view = View
+select-plane.view-aria = View ({0})
+select-plane.edit = Edit
+select-plane.edit-aria = Edit ({0})
+select-plane.delete = Delete
+select-plane.delete-aria = Delete ({0})
+
+# Create Plane
+create-plane.title = Create a plane of existence
+create-plane.heading = Create a plane of existence
+create-plane.subheading = Enter the details of the new plane of existence
+create-plane.name.label = Plane Name
+create-plane.description.label = Plane Description
+create-plane.alignment.label = Plane Alignment
+create-plane.create.aria-label = Create plane of existence
+
+# Edit Plane
+edit-plane.title = Edit this plane of existence
+edit-plane.heading = Edit this plane of existence
+edit-plane.subheading = Enter the updated details of the plane of existence
+edit-plane.name.label = Plane Name
+edit-plane.description.label = Plane Description
+edit-plane.alignment.label = Plane Alignment
+edit-plane.save.aria-label = Save plane of existence
+
+# Delete Plane
+delete-plane.title = Are you sure you want to delete this plane of existence?
+delete-plane.heading = Are you sure you want to delete this plane of existence?
+delete-plane.subheading = Plane information:
+delete-plane.name = Name:
+delete-plane.description = Description:
+delete-plane.alignment = Alignment:
+delete-plane.confirm.aria-label = Confirm deletion
+
+alignment.any = Any
+alignment.lawful-good = Lawful Good
+alignment.lawful-neutral = Lawful Neutral
+alignment.lawful-evil = Lawful Evil
+alignment.neutral-good = Neutral Good
+alignment.neutral = Neutral
+alignment.neutral-evil = Neutral Evil
+alignment.chaotic-good = Chaotic Good
+alignment.chaotic-neutral = Chaotic Neutral
+alignment.chaotic-evil = Chaotic Evil
+alignment.unaligned = Unaligned
+
 # Internal server error
 error.internal-server-error.title = There was a problem
 error.internal-server-error.heading = There was a problem
@@ -67,3 +117,8 @@ error.other-error.subheading = A problem occurred, please try again in a few min
 # Campaign form
 error.campaign.name.required = Enter your campaign''s name
 error.campaign.name.max-length = Campaign name must be less than 50 characters
+
+# Plane form
+error.plane.name.required = Enter the plane of existence''s name
+error.plane.name.max-length = Plane of existence''s name must be less than 50 characters
+error.plane.alignment.required = Select a valid alignment

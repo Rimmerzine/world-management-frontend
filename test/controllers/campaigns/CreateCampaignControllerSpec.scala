@@ -1,4 +1,4 @@
-package controllers
+package controllers.campaigns
 
 import config.AppConfig
 import forms.CampaignForm
@@ -74,7 +74,8 @@ class CreateCampaignControllerSpec extends UnitSpec with TestConstants {
     }
     s"return $SEE_OTHER" when {
       "the campaign was created" in new Setup {
-        when(mockCampaignService.createCampaign(any())(any())) thenReturn Future.successful(Right(testCampaign))
+        when(mockCampaignService.createCampaign(any())(any()))
+          .thenReturn(Future.successful(Right(testCampaign)))
 
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody(
           CampaignForm.campaignName -> testCampaignName,
@@ -83,7 +84,8 @@ class CreateCampaignControllerSpec extends UnitSpec with TestConstants {
         val result: Future[Result] = controller.submit()(request)
 
         status(result) mustBe SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.SelectCampaignController.show().url)
+        val expectedRedirect: String = controllers.planes.routes.SelectPlaneController.show(testCampaign.id).url.replaceAllLiterally(testCampaign.id, "(.*)")
+        redirectLocation(result).getOrElse("") must include regex expectedRedirect.r
       }
     }
   }

@@ -23,7 +23,7 @@ trait CreateCampaign extends MainTemplate with InputTextWithLabel with TextAreaW
   def apply(campaignForm: Form[(String, Option[String])]): String = mainTemplate(messages("create-campaign.title"), "8")(
     h1(messages("create-campaign.heading")),
     h2(cls := "header-medium")(messages("create-campaign.subheading")),
-    form(action := controllers.routes.CreateCampaignController.submit().url, method := "POST")(
+    form(action := controllers.campaigns.routes.CreateCampaignController.submit().url, method := "POST")(
       div(cls := "form-group")(
         inputTextWithLabel(campaignForm(campaignName), campaignName, campaignName, messages("create-campaign.name.label"))
       ),
