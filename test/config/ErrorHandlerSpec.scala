@@ -1,12 +1,12 @@
 package config
 
 import helpers.UnitSpec
+import org.mockito.Mockito.when
 import play.api.i18n.DefaultMessagesApi
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.errors.{InternalServerError, NotFound, OtherError}
-import org.mockito.Mockito.when
 import utils.TestConstants
+import views.errors.{InternalServerError, NotFound, OtherError}
 
 class ErrorHandlerSpec extends UnitSpec with TestConstants {
 

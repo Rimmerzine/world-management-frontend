@@ -1,6 +1,5 @@
 package controllers.campaigns
 
-import config.AppConfig
 import controllers.FrontendController
 import javax.inject.Inject
 import play.api.mvc._
@@ -14,7 +13,6 @@ import scala.concurrent.ExecutionContext
 class DeleteCampaignControllerImpl @Inject()(
                                               val controllerComponents: ControllerComponents,
                                               val campaignService: CampaignService,
-                                              val appConfig: AppConfig,
                                               val deleteCampaign: DeleteCampaign,
                                               val internalServerError: InternalServerError,
                                               val notFound: NotFound
@@ -27,7 +25,6 @@ trait DeleteCampaignController extends FrontendController {
   val internalServerError: InternalServerError
   val notFound: NotFound
 
-  implicit val appConfig: AppConfig
   implicit lazy val ec: ExecutionContext = controllerComponents.executionContext
 
   def show(campaignId: String): Action[AnyContent] = Action.async { implicit request =>

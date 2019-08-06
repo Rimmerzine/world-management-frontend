@@ -1,6 +1,5 @@
 package controllers.planes
 
-import config.AppConfig
 import controllers.FrontendController
 import javax.inject.Inject
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
@@ -12,13 +11,12 @@ import views.planes.DeletePlane
 import scala.concurrent.ExecutionContext
 
 class DeletePlaneControllerImpl @Inject()(
-                                              val controllerComponents: ControllerComponents,
-                                              val planeService: PlaneService,
-                                              val appConfig: AppConfig,
-                                              val deletePlane: DeletePlane,
-                                              val internalServerError: InternalServerError,
-                                              val notFound: NotFound
-                                            ) extends DeletePlaneController
+                                           val controllerComponents: ControllerComponents,
+                                           val planeService: PlaneService,
+                                           val deletePlane: DeletePlane,
+                                           val internalServerError: InternalServerError,
+                                           val notFound: NotFound
+                                         ) extends DeletePlaneController
 
 trait DeletePlaneController extends FrontendController {
 
@@ -27,7 +25,6 @@ trait DeletePlaneController extends FrontendController {
   val internalServerError: InternalServerError
   val notFound: NotFound
 
-  implicit val appConfig: AppConfig
   implicit lazy val ec: ExecutionContext = controllerComponents.executionContext
 
   def show(planeId: String): Action[AnyContent] = Action.async { implicit request =>

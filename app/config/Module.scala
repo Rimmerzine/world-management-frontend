@@ -4,10 +4,12 @@ import com.google.inject.AbstractModule
 import connectors._
 import controllers._
 import controllers.campaigns._
+import controllers.lands._
 import controllers.planes._
 import services._
 import views.campaigns._
 import views.errors._
+import views.lands._
 import views.planes._
 
 class Module extends AbstractModule {
@@ -27,6 +29,7 @@ class Module extends AbstractModule {
   def bindConnectors(): Unit = {
     bind(classOf[CampaignConnector]).to(classOf[CampaignConnectorImpl]).asEagerSingleton()
     bind(classOf[PlaneConnector]).to(classOf[PlaneConnectorImpl]).asEagerSingleton()
+    bind(classOf[LandConnector]).to(classOf[LandConnectorImpl]).asEagerSingleton()
   }
 
   def bindControllers(): Unit = {
@@ -41,11 +44,17 @@ class Module extends AbstractModule {
     bind(classOf[CreatePlaneController]).to(classOf[CreatePlaneControllerImpl]).asEagerSingleton()
     bind(classOf[EditPlaneController]).to(classOf[EditPlaneControllerImpl]).asEagerSingleton()
     bind(classOf[DeletePlaneController]).to(classOf[DeletePlaneControllerImpl]).asEagerSingleton()
+
+    bind(classOf[SelectLandController]).to(classOf[SelectLandControllerImpl]).asEagerSingleton()
+    bind(classOf[CreateLandController]).to(classOf[CreateLandControllerImpl]).asEagerSingleton()
+    bind(classOf[EditLandController]).to(classOf[EditLandControllerImpl]).asEagerSingleton()
+    bind(classOf[DeleteLandController]).to(classOf[DeleteLandControllerImpl]).asEagerSingleton()
   }
 
   def bindServices(): Unit = {
     bind(classOf[CampaignService]).to(classOf[CampaignServiceImpl]).asEagerSingleton()
     bind(classOf[PlaneService]).to(classOf[PlaneServiceImpl]).asEagerSingleton()
+    bind(classOf[LandService]).to(classOf[LandServiceImpl]).asEagerSingleton()
   }
 
   def bindViews(): Unit = {
@@ -58,6 +67,11 @@ class Module extends AbstractModule {
     bind(classOf[CreatePlane]).to(classOf[CreatePlaneImpl]).asEagerSingleton()
     bind(classOf[EditPlane]).to(classOf[EditPlaneImpl]).asEagerSingleton()
     bind(classOf[DeletePlane]).to(classOf[DeletePlaneImpl]).asEagerSingleton()
+
+    bind(classOf[SelectLand]).to(classOf[SelectLandImpl]).asEagerSingleton()
+    bind(classOf[CreateLand]).to(classOf[CreateLandImpl]).asEagerSingleton()
+    bind(classOf[EditLand]).to(classOf[EditLandImpl]).asEagerSingleton()
+    bind(classOf[DeleteLand]).to(classOf[DeleteLandImpl]).asEagerSingleton()
 
     bind(classOf[InternalServerError]).to(classOf[InternalServerErrorImpl]).asEagerSingleton()
     bind(classOf[NotFound]).to(classOf[NotFoundImpl]).asEagerSingleton()

@@ -37,7 +37,7 @@ class CreatePlaneControllerSpec extends UnitSpec with TestConstants {
 
   "show" must {
     s"return $OK" in new Setup {
-      when(mockCreatePlane(matches(testCampaignId), any())) thenReturn "<html></html>"
+      when(mockCreatePlane(matches(testCampaignId), any())) thenReturn emptyHtml
 
       val result: Future[Result] = controller.show(testCampaignId)(FakeRequest())
       status(result) mustBe OK
@@ -48,7 +48,7 @@ class CreatePlaneControllerSpec extends UnitSpec with TestConstants {
   "submit" must {
     s"return $BAD_REQUEST" when {
       "the form has errors" in new Setup {
-        when(mockCreatePlane(matches(testCampaignId), any())) thenReturn "<html></html>"
+        when(mockCreatePlane(matches(testCampaignId), any())) thenReturn emptyHtml
 
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody()
         val result: Future[Result] = controller.submit(testCampaignId)(request)
@@ -60,7 +60,7 @@ class CreatePlaneControllerSpec extends UnitSpec with TestConstants {
     s"return $INTERNAL_SERVER_ERROR" when {
       "there was a problem creating a plane" in new Setup {
         when(mockPlaneService.createPlane(any())(any())) thenReturn Future.successful(Left(UnexpectedStatus))
-        when(mockInternalServerError()) thenReturn "<html></html>"
+        when(mockInternalServerError()) thenReturn emptyHtml
 
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody(
           PlaneForm.planeName -> testPlaneName,
@@ -86,7 +86,8 @@ class CreatePlaneControllerSpec extends UnitSpec with TestConstants {
         val result: Future[Result] = controller.submit(testCampaignId)(request)
 
         status(result) mustBe SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.planes.routes.SelectPlaneController.show(testCampaignId).url)
+        val expectedRedirect: String = controllers.lands.routes.SelectLandController.show(testPlane.planeId).url.replaceAllLiterally(testPlane.planeId, "(.*)")
+        redirectLocation(result).getOrElse("") must include regex expectedRedirect.r
       }
     }
   }

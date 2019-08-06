@@ -40,7 +40,7 @@ class SelectPlaneControllerSpec extends UnitSpec with TestConstants {
 
   "show" must {
     s"return $OK" when {
-      "campaigns are returned from the plane service" in new Setup {
+      "planes are returned from the plane service" in new Setup {
         when(mockCampaignService.retrieveSingleCampaign(matches(testCampaignId))(any())) thenReturn Future.successful(Right(testCampaign))
         when(mockPlaneService.retrieveAllPlanes(matches(testCampaignId))(any())) thenReturn Future.successful(Right(List(testPlane, testPlaneMinimal)))
         when(mockSelectPlane(testCampaign, List(testPlane, testPlaneMinimal))) thenReturn emptyHtml

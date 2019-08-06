@@ -16,7 +16,7 @@ trait DropdownWithLabel {
                          inputLabel: String,
                          ariaLabel: Option[String] = None
                        ): Seq[TypedTag[String]] = {
-    val isInvalid: String = if(inputField.hasErrors) "is-invalid" else ""
+    val isInvalid: String = if (inputField.hasErrors) "is-invalid" else ""
     Seq(
       label(`for` := inputId, ariaLabel.map(aria.label := _))(inputLabel),
       select(id := inputId, name := inputId, cls := s"form-control $isInvalid")(

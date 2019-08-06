@@ -1,6 +1,5 @@
 package controllers.planes
 
-import config.AppConfig
 import controllers.FrontendController
 import javax.inject.Inject
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
@@ -12,14 +11,13 @@ import views.planes.SelectPlane
 import scala.concurrent.{ExecutionContext, Future}
 
 class SelectPlaneControllerImpl @Inject()(
-                                              val controllerComponents: ControllerComponents,
-                                              val campaignService: CampaignService,
-                                              val planeService: PlaneService,
-                                              val appConfig: AppConfig,
-                                              val selectPlane: SelectPlane,
-                                              val internalServerError: InternalServerError,
-                                              val notFound: NotFound
-                                            ) extends SelectPlaneController
+                                           val controllerComponents: ControllerComponents,
+                                           val campaignService: CampaignService,
+                                           val planeService: PlaneService,
+                                           val selectPlane: SelectPlane,
+                                           val internalServerError: InternalServerError,
+                                           val notFound: NotFound
+                                         ) extends SelectPlaneController
 
 trait SelectPlaneController extends FrontendController {
 
@@ -29,7 +27,6 @@ trait SelectPlaneController extends FrontendController {
   val internalServerError: InternalServerError
   val notFound: NotFound
 
-  implicit val appConfig: AppConfig
   implicit lazy val ec: ExecutionContext = controllerComponents.executionContext
 
   def show(campaignId: String): Action[AnyContent] = Action.async { implicit request =>

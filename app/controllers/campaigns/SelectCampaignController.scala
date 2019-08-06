@@ -1,6 +1,5 @@
 package controllers.campaigns
 
-import config.AppConfig
 import controllers.FrontendController
 import javax.inject.Inject
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
@@ -13,7 +12,6 @@ import scala.concurrent.ExecutionContext
 class SelectCampaignControllerImpl @Inject()(
                                               val controllerComponents: ControllerComponents,
                                               val campaignService: CampaignService,
-                                              val appConfig: AppConfig,
                                               val selectCampaign: SelectCampaign,
                                               val internalServerError: InternalServerError
                                             ) extends SelectCampaignController
@@ -24,7 +22,6 @@ trait SelectCampaignController extends FrontendController {
   val selectCampaign: SelectCampaign
   val internalServerError: InternalServerError
 
-  implicit val appConfig: AppConfig
   implicit lazy val ec: ExecutionContext = controllerComponents.executionContext
 
   def show: Action[AnyContent] = Action.async { implicit request =>

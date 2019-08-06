@@ -1,6 +1,5 @@
 package controllers.planes
 
-import config.AppConfig
 import controllers.FrontendController
 import forms.PlaneForm
 import javax.inject.Inject
@@ -17,7 +16,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class EditPlaneControllerImpl @Inject()(
                                          val controllerComponents: ControllerComponents,
                                          val planeService: PlaneService,
-                                         val appConfig: AppConfig,
                                          val editPlane: EditPlane,
                                          val internalServerError: InternalServerError,
                                          val notFound: NotFound
@@ -29,11 +27,9 @@ trait EditPlaneController extends FrontendController {
   val editPlane: EditPlane
   val internalServerError: InternalServerError
   val notFound: NotFound
-
-  implicit val appConfig: AppConfig
-  implicit lazy val ec: ExecutionContext = controllerComponents.executionContext
-
   val form: Form[(String, Option[String], String)] = PlaneForm.form
+
+  implicit lazy val ec: ExecutionContext = controllerComponents.executionContext
 
   def show(planeId: String): Action[AnyContent] = Action.async { implicit request =>
     planeService.retrieveSinglePlane(planeId) map {
@@ -57,7 +53,7 @@ trait EditPlaneController extends FrontendController {
   private def validSubmit(campaignId: String, planeId: String)(name: String, description: Option[String], alignment: String): Future[Result] = {
     val updatedPlane: Plane = Plane(campaignId, planeId, name, description, alignment)
     planeService.updatePlane(updatedPlane) map {
-      case Right(_) => Redirect(controllers.planes.routes.SelectPlaneController.show(campaignId))
+      case Right(_) => Redirect(controllers.lands.routes.SelectLandController.show(planeId))
       case Left(PlaneNotFound) => NotFound(notFound()).as("text/html")
       case Left(_) => InternalServerError(internalServerError()).as("text/html")
     }

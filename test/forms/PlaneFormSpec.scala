@@ -35,14 +35,14 @@ class PlaneFormSpec extends UnitSpec with TestConstants {
       }
     }
     "have an error" when {
-      "no campaign name is provided" in new Setup {
+      "no plane name is provided" in new Setup {
         implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody(
           PlaneForm.planeAlignment -> testPlaneAlignment
         )
 
         form.bindFromRequest().errors mustBe Seq(FormError(PlaneForm.planeName, PlaneForm.nameMissingError))
       }
-      "campaign name is longer than 50 characters" in new Setup {
+      "plane name is longer than 50 characters" in new Setup {
         implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody(
           PlaneForm.planeName -> ("A" * 51),
           PlaneForm.planeAlignment -> testPlaneAlignment

@@ -36,7 +36,7 @@ trait EditPlane extends MainTemplate with InputTextWithLabel with TextAreaWithLa
         dropdownWithLabel(planeForm(planeAlignment), planeAlignment, alignments, messages("edit-plane.alignment.label"))
       ),
       div(cls := "form-group")(
-        button(cls := "btn btn-success", aria.label := messages("edit-plane.edit.aria-label"))(messages("common.save"))
+        button(cls := "btn btn-success", aria.label := messages("edit-plane.save.aria-label"))(messages("common.save"))
       )
     )
   )

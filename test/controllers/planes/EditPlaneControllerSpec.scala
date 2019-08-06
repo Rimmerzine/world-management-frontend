@@ -138,7 +138,7 @@ class EditPlaneControllerSpec extends UnitSpec with TestConstants {
       }
     }
     s"return $SEE_OTHER" when {
-      "the plane was created" in new Setup {
+      "the plane was updated" in new Setup {
         when(mockPlaneService.retrieveSinglePlane(matches(testPlane.planeId))(any())) thenReturn Future.successful(Right(testPlane))
         when(mockPlaneService.updatePlane(matches(testPlane))(any())) thenReturn Future.successful(Right(testPlane))
 
@@ -150,7 +150,7 @@ class EditPlaneControllerSpec extends UnitSpec with TestConstants {
         val result: Future[Result] = controller.submit(testPlane.planeId)(request)
 
         status(result) mustBe SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.planes.routes.SelectPlaneController.show(testPlane.campaignId).url)
+        redirectLocation(result) mustBe Some(controllers.lands.routes.SelectLandController.show(testLand.planeId).url)
       }
     }
   }

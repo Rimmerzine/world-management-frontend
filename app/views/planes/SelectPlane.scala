@@ -35,7 +35,7 @@ trait SelectPlane extends MainTemplate with Card {
         List(
           CardLink(
             messages("select-plane.view"),
-            controllers.planes.routes.SelectPlaneController.show(campaign.id).url,
+            controllers.lands.routes.SelectLandController.show(plane.planeId).url,
             Some(messages("select-plane.view-aria", plane.name))
           ),
           CardLink(

@@ -1,6 +1,5 @@
 package controllers.campaigns
 
-import config.AppConfig
 import controllers.FrontendController
 import forms.CampaignForm
 import javax.inject.Inject
@@ -17,7 +16,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class CreateCampaignControllerImpl @Inject()(
                                               val controllerComponents: ControllerComponents,
                                               val campaignService: CampaignService,
-                                              val appConfig: AppConfig,
                                               val createCampaign: CreateCampaign,
                                               val internalServerError: InternalServerError
                                             ) extends CreateCampaignController
@@ -27,11 +25,9 @@ trait CreateCampaignController extends FrontendController {
   val campaignService: CampaignService
   val createCampaign: CreateCampaign
   val internalServerError: InternalServerError
-
-  implicit val appConfig: AppConfig
-  implicit lazy val ec: ExecutionContext = controllerComponents.executionContext
-
   val campaignForm: Form[(String, Option[String])] = CampaignForm.form
+
+  implicit lazy val ec: ExecutionContext = controllerComponents.executionContext
 
   def show: Action[AnyContent] = Action { implicit request =>
     Ok(createCampaign(campaignForm)).as("text/html")

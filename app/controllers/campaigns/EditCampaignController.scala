@@ -1,6 +1,5 @@
 package controllers.campaigns
 
-import config.AppConfig
 import controllers.FrontendController
 import forms.CampaignForm
 import javax.inject.Inject
@@ -16,13 +15,12 @@ import views.errors.{InternalServerError, NotFound}
 import scala.concurrent.{ExecutionContext, Future}
 
 class EditCampaignControllerImpl @Inject()(
-                                              val controllerComponents: ControllerComponents,
-                                              val campaignService: CampaignService,
-                                              val appConfig: AppConfig,
-                                              val editCampaign: EditCampaign,
-                                              val internalServerError: InternalServerError,
-                                              val notFound: NotFound
-                                            ) extends EditCampaignController
+                                            val controllerComponents: ControllerComponents,
+                                            val campaignService: CampaignService,
+                                            val editCampaign: EditCampaign,
+                                            val internalServerError: InternalServerError,
+                                            val notFound: NotFound
+                                          ) extends EditCampaignController
 
 trait EditCampaignController extends FrontendController {
 
@@ -30,11 +28,9 @@ trait EditCampaignController extends FrontendController {
   val editCampaign: EditCampaign
   val internalServerError: InternalServerError
   val notFound: NotFound
-
-  implicit val appConfig: AppConfig
-  implicit lazy val ec: ExecutionContext = controllerComponents.executionContext
-
   val campaignForm: Form[(String, Option[String])] = CampaignForm.form
+
+  implicit lazy val ec: ExecutionContext = controllerComponents.executionContext
 
   def show(campaignId: String): Action[AnyContent] = Action.async { implicit request =>
     campaignService.retrieveSingleCampaign(campaignId) map {

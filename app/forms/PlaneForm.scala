@@ -4,7 +4,6 @@ import play.api.data.Form
 import play.api.data.Forms._
 import play.api.data.validation.{Constraint, Invalid, Valid}
 
-
 object PlaneForm extends StopOnFirstFail with FormConstraints {
 
   val alignmentOptions: List[String] = List(

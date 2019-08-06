@@ -37,7 +37,7 @@ class CreateCampaignControllerSpec extends UnitSpec with TestConstants {
 
   "show" must {
     s"return $OK" in new Setup {
-      when(mockCreateCampaign(any())) thenReturn "<html></html>"
+      when(mockCreateCampaign(any())) thenReturn emptyHtml
 
       val result: Future[Result] = controller.show()(FakeRequest())
       status(result) mustBe OK
@@ -48,7 +48,7 @@ class CreateCampaignControllerSpec extends UnitSpec with TestConstants {
   "submit" must {
     s"return $BAD_REQUEST" when {
       "the form had errors" in new Setup {
-        when(mockCreateCampaign(any())) thenReturn "<html></html>"
+        when(mockCreateCampaign(any())) thenReturn emptyHtml
 
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody()
         val result: Future[Result] = controller.submit()(request)
@@ -60,7 +60,7 @@ class CreateCampaignControllerSpec extends UnitSpec with TestConstants {
     s"return $INTERNAL_SERVER_ERROR" when {
       "there was a problem creating a campaign" in new Setup {
         when(mockCampaignService.createCampaign(any())(any())) thenReturn Future.successful(Left(UnexpectedStatus))
-        when(mockInternalServerError()) thenReturn "<html></html>"
+        when(mockInternalServerError()) thenReturn emptyHtml
 
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody(
           CampaignForm.campaignName -> testCampaignName,

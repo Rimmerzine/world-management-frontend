@@ -64,7 +64,7 @@ select-plane.delete-aria = Delete ({0})
 # Create Plane
 create-plane.title = Create a plane of existence
 create-plane.heading = Create a plane of existence
-create-plane.subheading = Enter the details of the new plane of existence
+create-plane.subheading = Enter the details of the new plane of existence:
 create-plane.name.label = Plane Name
 create-plane.description.label = Plane Description
 create-plane.alignment.label = Plane Alignment
@@ -73,9 +73,9 @@ create-plane.create.aria-label = Create plane of existence
 # Edit Plane
 edit-plane.title = Edit this plane of existence
 edit-plane.heading = Edit this plane of existence
-edit-plane.subheading = Enter the updated details of the plane of existence
+edit-plane.subheading = Enter the updated details of the plane of existence:
 edit-plane.name.label = Plane Name
-edit-plane.description.label = Plane Description
+edit-plane.description.label = Plane Description (Optional)
 edit-plane.alignment.label = Plane Alignment
 edit-plane.save.aria-label = Save plane of existence
 
@@ -86,7 +86,42 @@ delete-plane.subheading = Plane information:
 delete-plane.name = Name:
 delete-plane.description = Description:
 delete-plane.alignment = Alignment:
-delete-plane.confirm.aria-label = Confirm deletion
+delete-plane.confirm.aria-label = Delete this plane
+
+# Select Land
+select-land.title = Lands in ''{0}''
+select-land.heading = Lands in ''{0}''
+select-land.create = Create a new land
+select-land.view = View
+select-land.view-aria = View ({0})
+select-land.edit = Edit
+select-land.edit-aria = Edit ({0})
+select-land.delete = Delete
+select-land.delete-aria = Delete ({0})
+
+# Create Land
+create-land.title = Create a land in this plane of existence
+create-land.heading = Create a land in this plane of existence
+create-land.subheading = Enter the details of this new land:
+create-land.name.label = Land Name
+create-land.description.label = Land Description (Optional)
+create-land.create.aria-label = Create land
+
+# Edit Land
+edit-land.title = Edit this land
+edit-land.heading = Edit this land
+edit-land.subheading = Update the details of this land:
+edit-land.name.label = Land Name
+edit-land.description.label = Land Description (Optional)
+edit-land.save.aria-label = Save land
+
+# Delete Land
+delete-land.title = Are you sure you want to delete this land?
+delete-land.heading = Are you sure you want to delete this land?
+delete-land.subheading = Land information:
+delete-land.name = Name:
+delete-land.description = Description:
+delete-land.confirm.aria-label = Delete this land
 
 alignment.any = Any
 alignment.lawful-good = Lawful Good

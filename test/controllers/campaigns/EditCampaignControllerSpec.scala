@@ -113,7 +113,7 @@ class EditCampaignControllerSpec extends UnitSpec with TestConstants {
       }
     }
     s"return $SEE_OTHER" when {
-      "the campaign was created" in new Setup {
+      "the campaign was updated" in new Setup {
         when(mockCampaignService.updateCampaign(matches(testCampaign))(any())) thenReturn Future.successful(Right(testCampaign))
 
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody(

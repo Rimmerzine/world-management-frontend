@@ -1,7 +1,7 @@
 package views.planes
 
 import config.AppConfig
-import forms.PlaneForm.{planeAlignment, planeDescription, planeName, alignmentOptions}
+import forms.PlaneForm.{alignmentOptions, planeAlignment, planeDescription, planeName}
 import javax.inject.Inject
 import play.api.data.Form
 import play.api.i18n.{Langs, Messages, MessagesApi, MessagesImpl}

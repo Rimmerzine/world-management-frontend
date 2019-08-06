@@ -8,7 +8,7 @@ import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
 import utils.ErrorModel
-import utils.ErrorModel.{PlaneNotFound, JsonParseError, UnexpectedStatus}
+import utils.ErrorModel.{JsonParseError, PlaneNotFound, UnexpectedStatus}
 
 import scala.concurrent.{ExecutionContext, Future}
 
