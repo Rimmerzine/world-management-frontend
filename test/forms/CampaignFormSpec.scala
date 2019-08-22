@@ -18,18 +18,18 @@ class CampaignFormSpec extends UnitSpec with TestConstants {
     "bind successfully" when {
       "a valid campaign name and description is provided" in new Setup {
         implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody(
-          CampaignForm.campaignName -> testCampaignName,
-          CampaignForm.campaignDescription -> testCampaignDescription
+          CampaignForm.campaignName -> campaignName,
+          CampaignForm.campaignDescription -> campaignDescription
         )
 
-        form.bindFromRequest().value mustBe Some(testCampaignName, Some(testCampaignDescription))
+        form.bindFromRequest().value mustBe Some(campaignName, Some(campaignDescription))
       }
       "a valid campaign name is provided with no description" in new Setup {
         implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody(
-          CampaignForm.campaignName -> testCampaignName
+          CampaignForm.campaignName -> campaignName
         )
 
-        form.bindFromRequest().value mustBe Some(testCampaignName, None)
+        form.bindFromRequest().value mustBe Some(campaignName, None)
       }
     }
     "have an error" when {

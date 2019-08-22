@@ -2,8 +2,8 @@ package controllers
 
 import helpers.UnitSpec
 import play.api.mvc.{ControllerComponents, Result}
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.api.test.{FakeRequest, Helpers}
 
 import scala.concurrent.Future
 
@@ -11,7 +11,7 @@ class IndexControllerSpec extends UnitSpec {
 
   trait Setup {
     val controller: IndexController = new IndexController() {
-      override protected def controllerComponents: ControllerComponents = Helpers.stubControllerComponents()
+      val controllerComponents: ControllerComponents = stubControllerComponents()
     }
   }
 

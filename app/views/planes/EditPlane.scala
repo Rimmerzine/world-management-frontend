@@ -5,6 +5,7 @@ import forms.PlaneForm.{alignmentOptions, planeAlignment, planeDescription, plan
 import javax.inject.Inject
 import play.api.data.Form
 import play.api.i18n.{Langs, Messages, MessagesApi, MessagesImpl}
+import scalatags.Text.TypedTag
 import scalatags.Text.all._
 import views.MainTemplate
 import views.helpers.inputs.{DropdownWithLabel, InputTextWithLabel, TextAreaWithLabel}
@@ -22,7 +23,7 @@ trait EditPlane extends MainTemplate with InputTextWithLabel with TextAreaWithLa
 
   val alignments: List[(String, String)] = alignmentOptions.map(alignmentValue => (alignmentValue, messages(s"alignment.$alignmentValue")))
 
-  def apply(planeId: String, planeForm: Form[(String, Option[String], String)]): String = mainTemplate(messages("edit-plane.title"), "8")(
+  def apply(planeId: String, planeForm: Form[(String, Option[String], String)]): TypedTag[String] = mainTemplate(messages("edit-plane.title"), "8")(
     h1(messages("edit-plane.heading")),
     h2(cls := "header-medium")(messages("edit-plane.subheading")),
     form(action := controllers.planes.routes.EditPlaneController.submit(planeId).url, method := "POST")(

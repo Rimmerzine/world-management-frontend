@@ -5,6 +5,7 @@ import forms.CampaignForm.{campaignDescription, campaignName}
 import javax.inject.Inject
 import play.api.data.Form
 import play.api.i18n.{Langs, Messages, MessagesApi, MessagesImpl}
+import scalatags.Text.TypedTag
 import scalatags.Text.all._
 import views.MainTemplate
 import views.helpers.inputs.{InputTextWithLabel, TextAreaWithLabel}
@@ -20,7 +21,7 @@ trait EditCampaign extends MainTemplate with InputTextWithLabel with TextAreaWit
   val messages: Messages
   val appConfig: AppConfig
 
-  def apply(campaignForm: Form[(String, Option[String])], campaignId: String): String = mainTemplate(messages("edit-campaign.title"), "8")(
+  def apply(campaignForm: Form[(String, Option[String])], campaignId: String): TypedTag[String] = mainTemplate(messages("edit-campaign.title"), "8")(
     h1(messages("edit-campaign.heading")),
     h2(cls := "header-medium")(messages("edit-campaign.subheading")),
     form(action := controllers.campaigns.routes.EditCampaignController.submit(campaignId).url, method := "POST")(

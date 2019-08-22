@@ -5,6 +5,7 @@ import forms.PlaneForm.{alignmentOptions, planeAlignment, planeDescription, plan
 import javax.inject.Inject
 import play.api.data.Form
 import play.api.i18n.{Langs, Messages, MessagesApi, MessagesImpl}
+import scalatags.Text.TypedTag
 import scalatags.Text.all._
 import views.MainTemplate
 import views.helpers.inputs.{DropdownWithLabel, InputTextWithLabel, TextAreaWithLabel}
@@ -22,10 +23,10 @@ trait CreatePlane extends MainTemplate with InputTextWithLabel with TextAreaWith
 
   val alignments: List[(String, String)] = alignmentOptions.map(alignmentValue => (alignmentValue, messages(s"alignment.$alignmentValue")))
 
-  def apply(campaignId: String, planeForm: Form[(String, Option[String], String)]): String = mainTemplate(messages("create-plane.title"), "8")(
+  def apply(planeForm: Form[(String, Option[String], String)]): TypedTag[String] = mainTemplate(messages("create-plane.title"), "8")(
     h1(messages("create-plane.heading")),
     h2(cls := "header-medium")(messages("create-plane.subheading")),
-    form(action := controllers.planes.routes.CreatePlaneController.submit(campaignId).url, method := "POST")(
+    form(action := controllers.planes.routes.CreatePlaneController.submit().url, method := "POST")(
       div(cls := "form-group")(
         inputTextWithLabel(planeForm(planeName), planeName, planeName, messages("create-plane.name.label"))
       ),

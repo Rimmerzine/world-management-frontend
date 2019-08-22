@@ -20,7 +20,7 @@ class ErrorHandlerSpec extends UnitSpec with TestConstants {
 
   "onServerError" must {
     s"return $INTERNAL_SERVER_ERROR" in {
-      when(internalServerError()) thenReturn emptyHtml
+      when(internalServerError()) thenReturn emptyHtmlTag
 
       val result = errorHandler.onServerError(FakeRequest(), new Exception("testException"))
       status(result) mustBe INTERNAL_SERVER_ERROR
@@ -31,7 +31,7 @@ class ErrorHandlerSpec extends UnitSpec with TestConstants {
   "onClientError" must {
     s"return $NOT_FOUND" when {
       s"the client error was a $NOT_FOUND" in {
-        when(notFound()) thenReturn emptyHtml
+        when(notFound()) thenReturn emptyHtmlTag
 
         val result = errorHandler.onClientError(FakeRequest(), NOT_FOUND, "not found")
         status(result) mustBe NOT_FOUND
@@ -40,7 +40,7 @@ class ErrorHandlerSpec extends UnitSpec with TestConstants {
     }
     s"return $FORBIDDEN" when {
       s"the client error was a $FORBIDDEN" in {
-        when(notFound()) thenReturn emptyHtml
+        when(notFound()) thenReturn emptyHtmlTag
 
         val result = errorHandler.onClientError(FakeRequest(), FORBIDDEN, "forbidden")
         status(result) mustBe FORBIDDEN
@@ -49,7 +49,7 @@ class ErrorHandlerSpec extends UnitSpec with TestConstants {
     }
     s"return the status the error was" when {
       s"the client error was any other type of client error" in {
-        when(otherError()) thenReturn emptyHtml
+        when(otherError()) thenReturn emptyHtmlTag
 
         val result = errorHandler.onClientError(FakeRequest(), NOT_ACCEPTABLE, "not acceptable")
         status(result) mustBe NOT_ACCEPTABLE

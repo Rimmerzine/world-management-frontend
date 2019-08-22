@@ -5,6 +5,7 @@ import forms.LandForm.{landDescription, landName}
 import javax.inject.Inject
 import play.api.data.Form
 import play.api.i18n.{Langs, Messages, MessagesApi, MessagesImpl}
+import scalatags.Text.TypedTag
 import scalatags.Text.all._
 import views.MainTemplate
 import views.helpers.inputs.{InputTextWithLabel, TextAreaWithLabel}
@@ -20,10 +21,10 @@ trait CreateLand extends MainTemplate with InputTextWithLabel with TextAreaWithL
   val messages: Messages
   val appConfig: AppConfig
 
-  def apply(planeId: String, landForm: Form[(String, Option[String])]): String = mainTemplate(messages("create-land.title"), "8")(
+  def apply(landForm: Form[(String, Option[String])]): TypedTag[String] = mainTemplate(messages("create-land.title"), "8")(
     h1(messages("create-land.heading")),
     h2(cls := "header-medium")(messages("create-land.subheading")),
-    form(action := controllers.lands.routes.CreateLandController.submit(planeId).url, method := "POST")(
+    form(action := controllers.lands.routes.CreateLandController.submit().url, method := "POST")(
       div(cls := "form-group")(
         inputTextWithLabel(landForm(landName), landName, landName, messages("create-land.name.label"))
       ),

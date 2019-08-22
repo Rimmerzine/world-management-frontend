@@ -10,8 +10,6 @@ object ErrorModel {
 
   final case object CampaignNotFound extends ErrorModel
 
-  final case object PlaneNotFound extends ErrorModel
-
-  final case object LandNotFound extends ErrorModel
+  final case object ElementNotFound extends ErrorModel
 
 }

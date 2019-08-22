@@ -28,18 +28,18 @@ trait DeleteCampaignController extends FrontendController {
   implicit lazy val ec: ExecutionContext = controllerComponents.executionContext
 
   def show(campaignId: String): Action[AnyContent] = Action.async { implicit request =>
-    campaignService.retrieveSingleCampaign(campaignId) map {
-      case Right(campaign) => Ok(deleteCampaign(campaign)).as("text/html")
-      case Left(CampaignNotFound) => NotFound(notFound()).as("text/html")
-      case Left(_) => InternalServerError(internalServerError()).as("text/html")
+    campaignService.retrieveCampaign(campaignId) map {
+      case Right(campaign) => Ok(deleteCampaign(campaign))
+      case Left(CampaignNotFound) => NotFound(notFound())
+      case Left(_) => InternalServerError(internalServerError())
     }
   }
 
   def submit(campaignId: String): Action[AnyContent] = Action.async { implicit request =>
     campaignService.removeCampaign(campaignId).map {
       case Right(_) => Redirect(controllers.campaigns.routes.SelectCampaignController.show())
-      case Left(CampaignNotFound) => NotFound(notFound()).as("text/html")
-      case Left(_) => InternalServerError(internalServerError()).as("text/html")
+      case Left(CampaignNotFound) => NotFound(notFound())
+      case Left(_) => InternalServerError(internalServerError())
     }
   }
 

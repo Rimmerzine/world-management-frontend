@@ -2,9 +2,10 @@ package controllers.planes
 
 import controllers.FrontendController
 import javax.inject.Inject
+import models.Plane
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import services.PlaneService
-import utils.ErrorModel.PlaneNotFound
+import services.CampaignService
+import utils.ErrorModel.{CampaignNotFound, ElementNotFound}
 import views.errors.{InternalServerError, NotFound}
 import views.planes.DeletePlane
 
@@ -12,7 +13,7 @@ import scala.concurrent.ExecutionContext
 
 class DeletePlaneControllerImpl @Inject()(
                                            val controllerComponents: ControllerComponents,
-                                           val planeService: PlaneService,
+                                           val campaignService: CampaignService,
                                            val deletePlane: DeletePlane,
                                            val internalServerError: InternalServerError,
                                            val notFound: NotFound
@@ -20,7 +21,7 @@ class DeletePlaneControllerImpl @Inject()(
 
 trait DeletePlaneController extends FrontendController {
 
-  val planeService: PlaneService
+  val campaignService: CampaignService
   val deletePlane: DeletePlane
   val internalServerError: InternalServerError
   val notFound: NotFound
@@ -28,18 +29,22 @@ trait DeletePlaneController extends FrontendController {
   implicit lazy val ec: ExecutionContext = controllerComponents.executionContext
 
   def show(planeId: String): Action[AnyContent] = Action.async { implicit request =>
-    planeService.retrieveSinglePlane(planeId) map {
-      case Right(plane) => Ok(deletePlane(plane)).as("text/html")
-      case Left(PlaneNotFound) => NotFound(notFound()).as("text/html")
-      case Left(_) => InternalServerError(internalServerError()).as("text/html")
+    withNavCollection { (campaignId, _) =>
+      campaignService.retrieveElement(campaignId, planeId).map {
+        case Right(element) => Ok(deletePlane(element.asInstanceOf[Plane]))
+        case Left(CampaignNotFound | ElementNotFound) => NotFound(notFound())
+        case Left(_) => InternalServerError(internalServerError())
+      }
     }
   }
 
   def submit(planeId: String): Action[AnyContent] = Action.async { implicit request =>
-    planeService.removePlane(planeId) map {
-      case Right(plane) => Redirect(controllers.planes.routes.SelectPlaneController.show(plane.campaignId))
-      case Left(PlaneNotFound) => NotFound(notFound()).as("text/html")
-      case Left(_) => InternalServerError(internalServerError()).as("text/html")
+    withNavCollection { (campaignId, _) =>
+      campaignService.removeElement(campaignId, planeId).map {
+        case Right(_) => Redirect(controllers.routes.SelectController.show())
+        case Left(CampaignNotFound) => NotFound(notFound())
+        case Left(_) => InternalServerError(internalServerError())
+      }
     }
   }
 

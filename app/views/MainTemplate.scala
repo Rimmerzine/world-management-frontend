@@ -7,7 +7,6 @@ import scalatags.Text.TypedTag
 import scalatags.Text.all._
 import scalatags.Text.tags2.{nav, title}
 
-
 trait MainTemplate {
 
   val messages: Messages
@@ -87,8 +86,8 @@ trait MainTemplate {
     )
   )
 
-  def mainTemplate(pageTitle: String, contentWidth: String = "12")(innerHtml: TypedTag[String]*): String = {
-    "<!doctype html>" + scalatags.Text.all.html(lang := "en")(
+  def mainTemplate(pageTitle: String, contentWidth: String = "12")(innerHtml: TypedTag[String]*): TypedTag[String] = {
+    scalatags.Text.all.html(lang := "en")(
       pageHead(pageTitle),
       body(
         topNavbar,
@@ -112,5 +111,6 @@ trait MainTemplate {
       )
     )
   }
+
 
 }

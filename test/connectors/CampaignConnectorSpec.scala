@@ -3,6 +3,7 @@ package connectors
 import helpers.UnitSpec
 import mockws.{MockWS, MockWSHelpers}
 import models.Campaign
+import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
 import play.api.mvc.Result
 import play.api.mvc.Results._
@@ -34,8 +35,8 @@ class CampaignConnectorSpec extends UnitSpec with MockWSHelpers with TestConstan
 
   "retrieveAllCampaigns" must {
     "return a list of campaigns" when {
-      "Ok is returned with campaign json" in new Setup(s"$testBaseUrl/campaigns/retrieve", GET, Ok(testCampaignsJson(2))) {
-        await(connector.retrieveAllCampaigns) mustBe Right(testCampaigns(2))
+      "Ok is returned with campaign json" in new Setup(s"$testBaseUrl/campaigns/retrieve", GET, Ok(Json.arr(campaignJson, campaignJson))) {
+        await(connector.retrieveAllCampaigns) mustBe Right(List(campaign, campaign))
       }
       "NoContent is returned" in new Setup(s"$testBaseUrl/campaigns/retrieve", GET, NoContent) {
         await(connector.retrieveAllCampaigns) mustBe Right(List.empty[Campaign])
@@ -55,87 +56,87 @@ class CampaignConnectorSpec extends UnitSpec with MockWSHelpers with TestConstan
 
   "retrieveSingleCampaign" must {
     "return a campaign" when {
-      "Ok is returned with a campaign json" in new Setup(s"$testBaseUrl/campaigns/retrieve/${testCampaign.id}", GET, Ok(testCampaignJson)) {
-        await(connector.retrieveSingleCampaign(testCampaign.id)) mustBe Right(testCampaign)
+      "Ok is returned with a campaign json" in new Setup(s"$testBaseUrl/campaigns/retrieve/${campaign.id}", GET, Ok(campaignJson)) {
+        await(connector.retrieveSingleCampaign(campaign.id)) mustBe Right(campaign)
       }
     }
     "return JsonParseError" when {
-      "Ok is returned but could not be parsed into a campaign" in new Setup(s"$testBaseUrl/campaigns/retrieve/${testCampaign.id}", GET, Ok(emptyJson)) {
-        await(connector.retrieveSingleCampaign(testCampaign.id)) mustBe Left(JsonParseError)
+      "Ok is returned but could not be parsed into a campaign" in new Setup(s"$testBaseUrl/campaigns/retrieve/${campaign.id}", GET, Ok(emptyJson)) {
+        await(connector.retrieveSingleCampaign(campaign.id)) mustBe Left(JsonParseError)
       }
     }
     "return CampaignNotFound" when {
-      "NotFound is returned" in new Setup(s"$testBaseUrl/campaigns/retrieve/${testCampaign.id}", GET, NotFound) {
-        await(connector.retrieveSingleCampaign(testCampaign.id)) mustBe Left(CampaignNotFound)
+      "NotFound is returned" in new Setup(s"$testBaseUrl/campaigns/retrieve/${campaign.id}", GET, NotFound) {
+        await(connector.retrieveSingleCampaign(campaign.id)) mustBe Left(CampaignNotFound)
       }
     }
     "return UnexpectedStatus" when {
-      "a status not matched is returned" in new Setup(s"$testBaseUrl/campaigns/retrieve/${testCampaign.id}", GET, InternalServerError) {
-        await(connector.retrieveSingleCampaign(testCampaign.id)) mustBe Left(UnexpectedStatus)
+      "a status not matched is returned" in new Setup(s"$testBaseUrl/campaigns/retrieve/${campaign.id}", GET, InternalServerError) {
+        await(connector.retrieveSingleCampaign(campaign.id)) mustBe Left(UnexpectedStatus)
       }
     }
   }
 
   "createCampaign" must {
     "return a campaign" when {
-      "Created is returned with a campaign json" in new Setup(s"$testBaseUrl/campaigns/create", POST, Created(testCampaignJson)) {
-        await(connector.createCampaign(testCampaign)) mustBe Right(testCampaign)
+      "Created is returned with a campaign json" in new Setup(s"$testBaseUrl/campaigns/create", POST, Created(campaignJson)) {
+        await(connector.createCampaign(campaign)) mustBe Right(campaign)
       }
     }
     "return JsonParseError" when {
       "Created is returned but could not be parsed into a campaign" in new Setup(s"$testBaseUrl/campaigns/create", POST, Created(emptyJson)) {
-        await(connector.createCampaign(testCampaign)) mustBe Left(JsonParseError)
+        await(connector.createCampaign(campaign)) mustBe Left(JsonParseError)
       }
     }
     "return UnexpectedStatus" when {
       "a status not matched is returned" in new Setup(s"$testBaseUrl/campaigns/create", POST, InternalServerError) {
-        await(connector.createCampaign(testCampaign)) mustBe Left(UnexpectedStatus)
+        await(connector.createCampaign(campaign)) mustBe Left(UnexpectedStatus)
       }
     }
   }
 
   "updateCampaign" must {
     "return a campaign" when {
-      "Ok is returned with a campaign json" in new Setup(s"$testBaseUrl/campaigns/update", PUT, Ok(testCampaignJson)) {
-        await(connector.updateCampaign(testCampaign)) mustBe Right(testCampaign)
+      "Ok is returned with a campaign json" in new Setup(s"$testBaseUrl/campaigns/update", PUT, Ok(campaignJson)) {
+        await(connector.updateCampaign(campaign)) mustBe Right(campaign)
       }
     }
     "return JsonParseError" when {
       "Ok is returned but could not be parsed into a campaign" in new Setup(s"$testBaseUrl/campaigns/update", PUT, Ok(emptyJson)) {
-        await(connector.updateCampaign(testCampaign)) mustBe Left(JsonParseError)
+        await(connector.updateCampaign(campaign)) mustBe Left(JsonParseError)
       }
     }
     "return CampaignNotFound" when {
       "NotFound is returned" in new Setup(s"$testBaseUrl/campaigns/update", PUT, NotFound) {
-        await(connector.updateCampaign(testCampaign)) mustBe Left(CampaignNotFound)
+        await(connector.updateCampaign(campaign)) mustBe Left(CampaignNotFound)
       }
     }
     "return UnexpectedStatus" when {
       "a status not matched is returned" in new Setup(s"$testBaseUrl/campaigns/update", PUT, InternalServerError) {
-        await(connector.updateCampaign(testCampaign)) mustBe Left(UnexpectedStatus)
+        await(connector.updateCampaign(campaign)) mustBe Left(UnexpectedStatus)
       }
     }
   }
 
   "removeCampaign" must {
     "return a campaign" when {
-      "Ok is returned with a campaign json" in new Setup(s"$testBaseUrl/campaigns/remove/${testCampaign.id}", DELETE, Ok(testCampaignJson)) {
-        await(connector.removeCampaign(testCampaign.id)) mustBe Right(testCampaign)
+      "Ok is returned with a campaign json" in new Setup(s"$testBaseUrl/campaigns/remove/${campaign.id}", DELETE, Ok(campaignJson)) {
+        await(connector.removeCampaign(campaign.id)) mustBe Right(campaign)
       }
     }
     "return JsonParseError" when {
-      "Ok is returned but could not be parsed into a campaign" in new Setup(s"$testBaseUrl/campaigns/remove/${testCampaign.id}", DELETE, Ok(emptyJson)) {
-        await(connector.removeCampaign(testCampaign.id)) mustBe Left(JsonParseError)
+      "Ok is returned but could not be parsed into a campaign" in new Setup(s"$testBaseUrl/campaigns/remove/${campaign.id}", DELETE, Ok(emptyJson)) {
+        await(connector.removeCampaign(campaign.id)) mustBe Left(JsonParseError)
       }
     }
     "return CampaignNotFound" when {
-      "NotFound is returned" in new Setup(s"$testBaseUrl/campaigns/remove/${testCampaign.id}", DELETE, NotFound) {
-        await(connector.removeCampaign(testCampaign.id)) mustBe Left(CampaignNotFound)
+      "NotFound is returned" in new Setup(s"$testBaseUrl/campaigns/remove/${campaign.id}", DELETE, NotFound) {
+        await(connector.removeCampaign(campaign.id)) mustBe Left(CampaignNotFound)
       }
     }
     "return UnexpectedStatus" when {
-      "a status not matched is returned" in new Setup(s"$testBaseUrl/campaigns/remove/${testCampaign.id}", DELETE, InternalServerError) {
-        await(connector.removeCampaign(testCampaign.id)) mustBe Left(UnexpectedStatus)
+      "a status not matched is returned" in new Setup(s"$testBaseUrl/campaigns/remove/${campaign.id}", DELETE, InternalServerError) {
+        await(connector.removeCampaign(campaign.id)) mustBe Left(UnexpectedStatus)
       }
     }
   }

@@ -5,7 +5,7 @@ import javax.inject.Inject
 import models.Campaign
 import play.api.Logging
 import play.api.http.Status._
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, Reads}
 import play.api.libs.ws.WSClient
 import utils.ErrorModel
 import utils.ErrorModel.{CampaignNotFound, JsonParseError, UnexpectedStatus}
@@ -26,7 +26,7 @@ trait CampaignConnector extends Logging {
   def retrieveAllCampaigns(implicit ec: ExecutionContext): Future[Either[ErrorModel, List[Campaign]]] = {
     wsClient.url(s"$baseUrl/campaigns/retrieve").get().map { response =>
       response.status match {
-        case OK => response.json.validate[List[Campaign]].fold(
+        case OK => response.json.validate[List[Campaign]](Reads.list(Campaign.reads)).fold(
           invalid => {
             logger.error(s"[retrieveAllCampaigns] Json could not be parsed from the backend. Status = ${response.status}, invalid json = $invalid")
             Left(JsonParseError)
@@ -43,7 +43,7 @@ trait CampaignConnector extends Logging {
   def retrieveSingleCampaign(campaignId: String)(implicit ec: ExecutionContext): Future[Either[ErrorModel, Campaign]] = {
     wsClient.url(s"$baseUrl/campaigns/retrieve/$campaignId").get().map { response =>
       response.status match {
-        case OK => response.json.validate[Campaign].fold(
+        case OK => response.json.validate[Campaign](Campaign.reads).fold(
           invalid => {
             logger.error(s"[retrieveSingleCampaign] Json could not be parsed from the backend. Status = ${response.status}, invalid json = $invalid")
             Left(JsonParseError)
@@ -61,7 +61,7 @@ trait CampaignConnector extends Logging {
   def createCampaign(campaign: Campaign)(implicit ec: ExecutionContext): Future[Either[ErrorModel, Campaign]] = {
     wsClient.url(s"$baseUrl/campaigns/create").post(Json.toJson(campaign)).map { response =>
       response.status match {
-        case CREATED => response.json.validate[Campaign].fold(
+        case CREATED => response.json.validate[Campaign](Campaign.reads).fold(
           invalid => {
             logger.error(s"[createCampaign] Json could not be parsed from the backend. Status = ${response.status}, invalid json = $invalid")
             Left(JsonParseError)
@@ -77,7 +77,7 @@ trait CampaignConnector extends Logging {
   def updateCampaign(campaign: Campaign)(implicit ec: ExecutionContext): Future[Either[ErrorModel, Campaign]] = {
     wsClient.url(s"$baseUrl/campaigns/update").put(Json.toJson(campaign)).map { response =>
       response.status match {
-        case OK => response.json.validate[Campaign].fold(
+        case OK => response.json.validate[Campaign](Campaign.reads).fold(
           invalid => {
             logger.error(s"[updateCampaign] Json could not be parsed from the backend. Status = ${response.status}, invalid json = $invalid")
             Left(JsonParseError)
@@ -95,7 +95,7 @@ trait CampaignConnector extends Logging {
   def removeCampaign(campaignId: String)(implicit ec: ExecutionContext): Future[Either[ErrorModel, Campaign]] = {
     wsClient.url(s"$baseUrl/campaigns/remove/$campaignId").delete().map { response =>
       response.status match {
-        case OK => response.json.validate[Campaign].fold(
+        case OK => response.json.validate[Campaign](Campaign.reads).fold(
           invalid => {
             logger.error(s"[removeCampaign] Json could not be parsed from the backend. Status = ${response.status}, invalid json = $invalid")
             Left(JsonParseError)

@@ -30,12 +30,12 @@ trait CreateCampaignController extends FrontendController {
   implicit lazy val ec: ExecutionContext = controllerComponents.executionContext
 
   def show: Action[AnyContent] = Action { implicit request =>
-    Ok(createCampaign(campaignForm)).as("text/html")
+    Ok(createCampaign(campaignForm))
   }
 
   def submit: Action[AnyContent] = Action.async { implicit request =>
     campaignForm.bindFromRequest.fold(
-      hasErrors => Future.successful(BadRequest(createCampaign(hasErrors)).as("text/html")),
+      hasErrors => Future.successful(BadRequest(createCampaign(hasErrors))),
       success => (validSubmit _).tupled(success)
     )
   }
@@ -43,8 +43,8 @@ trait CreateCampaignController extends FrontendController {
   private def validSubmit(name: String, description: Option[String])(implicit messagesProvider: MessagesProvider, request: Request[_]): Future[Result] = {
     val newCampaign: Campaign = Campaign.create(name, description)
     campaignService.createCampaign(newCampaign).map {
-      case Left(_) => InternalServerError(internalServerError()).as("text/html")
-      case Right(_) => Redirect(controllers.planes.routes.SelectPlaneController.show(newCampaign.id))
+      case Left(_) => InternalServerError(internalServerError())
+      case Right(_) => Redirect(controllers.routes.SelectController.show()).addingToSession(journeyKey -> newCampaign.id)
     }
   }
 

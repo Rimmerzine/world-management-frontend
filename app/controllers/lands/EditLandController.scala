@@ -3,11 +3,11 @@ package controllers.lands
 import controllers.FrontendController
 import forms.LandForm
 import javax.inject.Inject
-import models.Land
+import models.{Land, WorldElement}
 import play.api.data.Form
-import play.api.mvc.{Action, AnyContent, ControllerComponents, Result}
-import services.LandService
-import utils.ErrorModel.LandNotFound
+import play.api.mvc._
+import services.CampaignService
+import utils.ErrorModel.{CampaignNotFound, ElementNotFound}
 import views.errors.{InternalServerError, NotFound}
 import views.lands.EditLand
 
@@ -15,7 +15,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class EditLandControllerImpl @Inject()(
                                         val controllerComponents: ControllerComponents,
-                                        val landService: LandService,
+                                        val campaignService: CampaignService,
                                         val editLand: EditLand,
                                         val internalServerError: InternalServerError,
                                         val notFound: NotFound
@@ -23,7 +23,7 @@ class EditLandControllerImpl @Inject()(
 
 trait EditLandController extends FrontendController {
 
-  val landService: LandService
+  val campaignService: CampaignService
   val editLand: EditLand
   val internalServerError: InternalServerError
   val notFound: NotFound
@@ -32,30 +32,39 @@ trait EditLandController extends FrontendController {
   implicit lazy val ec: ExecutionContext = controllerComponents.executionContext
 
   def show(landId: String): Action[AnyContent] = Action.async { implicit request =>
-    landService.retrieveSingleLand(landId) map {
-      case Right(land) => Ok(editLand(landId, landForm.fill(land.name, land.description))).as("text/html")
-      case Left(LandNotFound) => NotFound(notFound()).as("text/html")
-      case Left(_) => InternalServerError(internalServerError()).as("text/html")
+    withNavCollection { (campaignId, _) =>
+      campaignService.retrieveElement(campaignId, landId).map {
+        case Right(land) => Ok(editLand(landId, landForm.fill(land.name, land.description)))
+        case Left(CampaignNotFound | ElementNotFound) => NotFound(notFound())
+        case Left(_) => InternalServerError(internalServerError())
+      }
     }
   }
 
   def submit(landId: String): Action[AnyContent] = Action.async { implicit request =>
-    landService.retrieveSingleLand(landId) flatMap {
-      case Right(land) => landForm.bindFromRequest.fold(
-        hasErrors => Future.successful(BadRequest(editLand(landId, hasErrors)).as("text/html")),
-        success => (validSubmit(land.planeId, land.landId) _).tupled(success)
-      )
-      case Left(LandNotFound) => Future.successful(NotFound(notFound()).as("text/html"))
-      case Left(_) => Future.successful(InternalServerError(internalServerError()).as("text/html"))
+    withNavCollection { (campaignId, _) =>
+      campaignService.retrieveElement(campaignId, landId).flatMap {
+        case Right(element) =>
+          val land: Land = element.asInstanceOf[Land]
+          landForm.bindFromRequest.fold(
+            hasErrors => Future.successful(BadRequest(editLand(landId, hasErrors))),
+            success => (validSubmit(land.id, land.content) _).tupled(success)
+          )
+        case Left(CampaignNotFound | ElementNotFound) => Future.successful(NotFound(notFound()))
+        case Left(_) => Future.successful(InternalServerError(internalServerError()))
+      }
     }
   }
 
-  private def validSubmit(planeId: String, landId: String)(name: String, description: Option[String]): Future[Result] = {
-    val updatedLand = Land(planeId, landId, name, description)
-    landService.updateLand(updatedLand) map {
-      case Left(LandNotFound) => NotFound(notFound()).as("text/html")
-      case Left(_) => InternalServerError(internalServerError()).as("text/html")
-      case Right(_) => Redirect(controllers.lands.routes.SelectLandController.show(updatedLand.planeId))
+  private def validSubmit(landId: String, content: List[WorldElement])(name: String, description: Option[String])
+                         (implicit request: Request[AnyContent]): Future[Result] = {
+    val updatedLand = Land("land", landId, name, description, content)
+    withNavCollection { (campaignId, journey) =>
+      campaignService.replaceElement(campaignId, updatedLand).map {
+        case Right(_) => Redirect(controllers.routes.SelectController.show()).addingToSession(journeyKey -> (journey :+ updatedLand.id).mkString(","))
+        case Left(CampaignNotFound) => NotFound(notFound())
+        case Left(_) => InternalServerError(internalServerError())
+      }
     }
   }
 

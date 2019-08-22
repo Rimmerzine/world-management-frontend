@@ -3,6 +3,7 @@ common.opens-in-new-tab = (Opens in a new tab)
 common.create = Create
 common.save = Save
 common.confirm = Confirm
+common.back = Back
 
 # Top navigation bar
 navbar.top.brand = D&D World Management
@@ -50,16 +51,12 @@ delete-campaign.name = Name:
 delete-campaign.description = Description:
 delete-campaign.confirm.aria-label = Delete this campaign
 
-# Select Plane
-select-plane.title = Planes in ''{0}''
-select-plane.heading = Planes in ''{0}''
-select-plane.create = Create a new plane
-select-plane.view = View
-select-plane.view-aria = View ({0})
-select-plane.edit = Edit
-select-plane.edit-aria = Edit ({0})
-select-plane.delete = Delete
-select-plane.delete-aria = Delete ({0})
+# Select Element
+select-element.title = {0} - {1}
+select-element.heading = {0} - {1}
+select-element.create-element = Create a new...
+select-element.create-plane = Create a new plane of existence
+select-element.create-land = Create a new land
 
 # Create Plane
 create-plane.title = Create a plane of existence
@@ -88,17 +85,6 @@ delete-plane.description = Description:
 delete-plane.alignment = Alignment:
 delete-plane.confirm.aria-label = Delete this plane
 
-# Select Land
-select-land.title = Lands in ''{0}''
-select-land.heading = Lands in ''{0}''
-select-land.create = Create a new land
-select-land.view = View
-select-land.view-aria = View ({0})
-select-land.edit = Edit
-select-land.edit-aria = Edit ({0})
-select-land.delete = Delete
-select-land.delete-aria = Delete ({0})
-
 # Create Land
 create-land.title = Create a land in this plane of existence
 create-land.heading = Create a land in this plane of existence
@@ -123,6 +109,7 @@ delete-land.name = Name:
 delete-land.description = Description:
 delete-land.confirm.aria-label = Delete this land
 
+# Alignments
 alignment.any = Any
 alignment.lawful-good = Lawful Good
 alignment.lawful-neutral = Lawful Neutral
@@ -134,6 +121,19 @@ alignment.chaotic-good = Chaotic Good
 alignment.chaotic-neutral = Chaotic Neutral
 alignment.chaotic-evil = Chaotic Evil
 alignment.unaligned = Unaligned
+
+# Cards
+card.view = View
+card.view-aria = View ({0})
+card.edit = Edit
+card.edit-aria = Edit ({0})
+card.delete = Delete
+card.delete-aria = Delete ({0})
+
+# Elements
+element.campaign = Campaign
+element.plane = Plane
+element.land = Land
 
 # Internal server error
 error.internal-server-error.title = There was a problem

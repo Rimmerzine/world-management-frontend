@@ -4,6 +4,7 @@ import _root_.models.Campaign
 import config.AppConfig
 import javax.inject.Inject
 import play.api.i18n.{Langs, Messages, MessagesApi, MessagesImpl}
+import scalatags.Text.TypedTag
 import scalatags.Text.all._
 import views.MainTemplate
 
@@ -18,7 +19,7 @@ trait DeleteCampaign extends MainTemplate {
   val messages: Messages
   val appConfig: AppConfig
 
-  def apply(campaign: Campaign): String = mainTemplate(messages("delete-campaign.title"), "8")(
+  def apply(campaign: Campaign): TypedTag[String] = mainTemplate(messages("delete-campaign.title"), "8")(
     h1(messages("delete-campaign.heading")),
     h2(cls := "header-medium")(messages("delete-campaign.subheading")),
     div(cls := "form-group")(

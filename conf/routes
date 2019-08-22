@@ -6,6 +6,7 @@ GET     /                                                                       
 
 # Select Campaign
 GET     /dnd-world-management/select-campaign                                   controllers.campaigns.SelectCampaignController.show()
+GET     /dnd-world-management/select-campaign/:id                               controllers.campaigns.SelectCampaignController.view(id)
 
 # Create Campaign
 GET     /dnd-world-management/create-campaign                                   controllers.campaigns.CreateCampaignController.show()
@@ -19,12 +20,9 @@ POST    /dnd-world-management/edit-campaign/:campaignId                         
 GET     /dnd-world-management/delete-campaign/:campaignId                       controllers.campaigns.DeleteCampaignController.show(campaignId)
 POST    /dnd-world-management/delete-campaign/:campaignId                       controllers.campaigns.DeleteCampaignController.submit(campaignId)
 
-# Select Plane
-GET     /dnd-world-management/campaign/:campaignId/select-plane                 controllers.planes.SelectPlaneController.show(campaignId)
-
 # Create Plane
-GET     /dnd-world-management/campaign/:campaignId/create-plane                 controllers.planes.CreatePlaneController.show(campaignId)
-POST    /dnd-world-management/campaign/:campaignId/create-plane                 controllers.planes.CreatePlaneController.submit(campaignId)
+GET     /dnd-world-management/create-plane                                      controllers.planes.CreatePlaneController.show()
+POST    /dnd-world-management/create-plane                                      controllers.planes.CreatePlaneController.submit()
 
 # Edit Campaign
 GET     /dnd-world-management/edit-plane/:planeId                               controllers.planes.EditPlaneController.show(planeId)
@@ -34,12 +32,9 @@ POST    /dnd-world-management/edit-plane/:planeId                               
 GET     /dnd-world-management/delete-plane/:planeId                             controllers.planes.DeletePlaneController.show(planeId)
 POST    /dnd-world-management/delete-plane/:planeId                             controllers.planes.DeletePlaneController.submit(planeId)
 
-# Select Land
-GET     /dnd-world-management/plane/:planeId/select-land                        controllers.lands.SelectLandController.show(planeId)
-
 # Create Land
-GET     /dnd-world-management/plane/:planeId/create-land                        controllers.lands.CreateLandController.show(planeId)
-POST    /dnd-world-management/plane/:planeId/create-land                        controllers.lands.CreateLandController.submit(planeId)
+GET     /dnd-world-management/create-land                                       controllers.lands.CreateLandController.show()
+POST    /dnd-world-management/create-land                                       controllers.lands.CreateLandController.submit()
 
 # Edit Land
 GET     /dnd-world-management/edit-land/:landId                                 controllers.lands.EditLandController.show(landId)
@@ -48,3 +43,8 @@ POST    /dnd-world-management/edit-land/:landId                                 
 # Delete Land
 GET     /dnd-world-management/delete-land/:landId                               controllers.lands.DeleteLandController.show(landId)
 POST    /dnd-world-management/delete-land/:landId                               controllers.lands.DeleteLandController.submit(landId)
+
+#Select
+GET     /dnd-world-management/select                                            controllers.SelectController.show()
+GET     /dnd-world-management/select/:id                                        controllers.SelectController.view(id)
+GET     /dnd-world-management/back                                              controllers.SelectController.back()

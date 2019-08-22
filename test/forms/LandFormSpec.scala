@@ -18,18 +18,18 @@ class LandFormSpec extends UnitSpec with TestConstants {
     "bind successfully" when {
       "optional fields are provided" in new Setup {
         implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody(
-          LandForm.landName -> testLandName,
-          LandForm.landDescription -> testLandDescription
+          LandForm.landName -> landName,
+          LandForm.landDescription -> landDescription
         )
 
-        form.bindFromRequest().value mustBe Some(testLandName, Some(testLandDescription))
+        form.bindFromRequest().value mustBe Some(landName, Some(landDescription))
       }
       "optional fields are not provided" in new Setup {
         implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody(
-          LandForm.landName -> testLandName
+          LandForm.landName -> landName
         )
 
-        form.bindFromRequest().value mustBe Some(testLandName, None)
+        form.bindFromRequest().value mustBe Some(landName, None)
       }
     }
     "have an error" when {

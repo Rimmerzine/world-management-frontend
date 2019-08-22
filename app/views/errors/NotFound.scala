@@ -3,6 +3,7 @@ package views.errors
 import config.AppConfig
 import javax.inject.Inject
 import play.api.i18n.{Langs, Messages, MessagesApi, MessagesImpl}
+import scalatags.Text.TypedTag
 import scalatags.Text.all._
 import views.MainTemplate
 
@@ -17,7 +18,7 @@ trait NotFound extends MainTemplate {
   val messages: Messages
   val appConfig: AppConfig
 
-  def apply(): String = mainTemplate(messages("error.not-found.title"), "8")(
+  def apply(): TypedTag[String] = mainTemplate(messages("error.not-found.title"), "8")(
     h1(cls := "text-center")(messages("error.not-found.heading"))
   )
 

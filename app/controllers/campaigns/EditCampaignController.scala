@@ -3,7 +3,7 @@ package controllers.campaigns
 import controllers.FrontendController
 import forms.CampaignForm
 import javax.inject.Inject
-import models.Campaign
+import models.{Campaign, WorldElement}
 import play.api.data.Form
 import play.api.i18n.MessagesProvider
 import play.api.mvc._
@@ -33,28 +33,35 @@ trait EditCampaignController extends FrontendController {
   implicit lazy val ec: ExecutionContext = controllerComponents.executionContext
 
   def show(campaignId: String): Action[AnyContent] = Action.async { implicit request =>
-    campaignService.retrieveSingleCampaign(campaignId) map {
-      case Right(campaign) => Ok(editCampaign(campaignForm.fill(campaign.name, campaign.description), campaignId)).as("text/html")
-      case Left(CampaignNotFound) => NotFound(notFound()).as("text/html")
-      case Left(_) => InternalServerError(internalServerError()).as("text/html")
+    campaignService.retrieveCampaign(campaignId) map {
+      case Right(campaign) => Ok(editCampaign(campaignForm.fill(campaign.name, campaign.description), campaignId))
+      case Left(CampaignNotFound) => NotFound(notFound())
+      case Left(_) => InternalServerError(internalServerError())
     }
   }
 
   def submit(campaignId: String): Action[AnyContent] = Action.async { implicit request =>
-    campaignForm.bindFromRequest.fold(
-      hasErrors => Future.successful(BadRequest(editCampaign(hasErrors, campaignId)).as("text/html")),
-      success => (validSubmit(campaignId) _).tupled(success)
-    )
+    campaignService.retrieveCampaign(campaignId) flatMap {
+      case Right(campaign) => campaignForm.bindFromRequest.fold(
+        hasErrors => Future.successful(BadRequest(editCampaign(hasErrors, campaignId))),
+        success => (validSubmit(campaignId, campaign.content) _).tupled(success)
+      )
+      case Left(CampaignNotFound) => Future.successful(NotFound(notFound()))
+      case Left(_) => Future.successful(InternalServerError(internalServerError()))
+    }
   }
 
-  private def validSubmit(campaignId: String)(name: String, description: Option[String])
+  private def validSubmit(campaignId: String, content: List[WorldElement])(name: String, description: Option[String])
                          (implicit messagesProvider: MessagesProvider, request: Request[_]): Future[Result] = {
-    val updatedCampaign: Campaign = Campaign(campaignId, name, description)
+
+    val updatedCampaign: Campaign = Campaign("campaign", campaignId, name, description, content)
+
     campaignService.updateCampaign(updatedCampaign).map {
-      case Right(_) => Redirect(controllers.planes.routes.SelectPlaneController.show(campaignId))
-      case Left(CampaignNotFound) => NotFound(notFound()).as("text/html")
-      case Left(_) => InternalServerError(internalServerError()).as("text/html")
+      case Right(_) => Redirect(controllers.routes.SelectController.show()).addingToSession(journeyKey -> updatedCampaign.id)
+      case Left(CampaignNotFound) => NotFound(notFound())
+      case Left(_) => InternalServerError(internalServerError())
     }
+
   }
 
 }

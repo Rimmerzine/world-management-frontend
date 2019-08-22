@@ -3,11 +3,11 @@ package controllers.planes
 import controllers.FrontendController
 import forms.PlaneForm
 import javax.inject.Inject
-import models.Plane
+import models.{Plane, WorldElement}
 import play.api.data.Form
-import play.api.mvc.{Action, AnyContent, ControllerComponents, Result}
-import services.PlaneService
-import utils.ErrorModel.PlaneNotFound
+import play.api.mvc._
+import services.CampaignService
+import utils.ErrorModel.{CampaignNotFound, ElementNotFound}
 import views.errors.{InternalServerError, NotFound}
 import views.planes.EditPlane
 
@@ -15,7 +15,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class EditPlaneControllerImpl @Inject()(
                                          val controllerComponents: ControllerComponents,
-                                         val planeService: PlaneService,
+                                         val campaignService: CampaignService,
                                          val editPlane: EditPlane,
                                          val internalServerError: InternalServerError,
                                          val notFound: NotFound
@@ -23,7 +23,7 @@ class EditPlaneControllerImpl @Inject()(
 
 trait EditPlaneController extends FrontendController {
 
-  val planeService: PlaneService
+  val campaignService: CampaignService
   val editPlane: EditPlane
   val internalServerError: InternalServerError
   val notFound: NotFound
@@ -32,30 +32,41 @@ trait EditPlaneController extends FrontendController {
   implicit lazy val ec: ExecutionContext = controllerComponents.executionContext
 
   def show(planeId: String): Action[AnyContent] = Action.async { implicit request =>
-    planeService.retrieveSinglePlane(planeId) map {
-      case Right(plane) => Ok(editPlane(planeId, form.fill(plane.name, plane.description, plane.alignment))).as("text/html")
-      case Left(PlaneNotFound) => NotFound(notFound()).as("text/html")
-      case Left(_) => InternalServerError(internalServerError()).as("text/html")
+    withNavCollection { (campaignId, _) =>
+      campaignService.retrieveElement(campaignId, planeId).map {
+        case Right(element) =>
+          val plane: Plane = element.asInstanceOf[Plane]
+          Ok(editPlane(planeId, form.fill(plane.name, plane.description, plane.alignment)))
+        case Left(CampaignNotFound | ElementNotFound) => NotFound(notFound())
+        case Left(_) => InternalServerError(internalServerError())
+      }
     }
   }
 
   def submit(planeId: String): Action[AnyContent] = Action.async { implicit request =>
-    planeService.retrieveSinglePlane(planeId) flatMap {
-      case Right(plane) => form.bindFromRequest.fold(
-        hasErrors => Future.successful(BadRequest(editPlane(planeId, hasErrors)).as("text/html")),
-        success => (validSubmit(plane.campaignId, planeId) _).tupled(success)
-      )
-      case Left(PlaneNotFound) => Future.successful(NotFound(notFound()).as("text/html"))
-      case Left(_) => Future.successful(InternalServerError(internalServerError()).as("text/html"))
+    withNavCollection { (campaignId, _) =>
+      campaignService.retrieveElement(campaignId, planeId).flatMap {
+        case Right(element) =>
+          val plane: Plane = element.asInstanceOf[Plane]
+          form.bindFromRequest.fold(
+            hasErrors => Future.successful(BadRequest(editPlane(planeId, hasErrors))),
+            success => (validSubmit(plane.id, plane.content) _).tupled(success)
+          )
+        case Left(CampaignNotFound | ElementNotFound) => Future.successful(NotFound(notFound()))
+        case Left(_) => Future.successful(InternalServerError(internalServerError()))
+      }
     }
   }
 
-  private def validSubmit(campaignId: String, planeId: String)(name: String, description: Option[String], alignment: String): Future[Result] = {
-    val updatedPlane: Plane = Plane(campaignId, planeId, name, description, alignment)
-    planeService.updatePlane(updatedPlane) map {
-      case Right(_) => Redirect(controllers.lands.routes.SelectLandController.show(planeId))
-      case Left(PlaneNotFound) => NotFound(notFound()).as("text/html")
-      case Left(_) => InternalServerError(internalServerError()).as("text/html")
+  private def validSubmit(planeId: String, content: List[WorldElement])(name: String, description: Option[String], alignment: String)
+                         (implicit request: Request[AnyContent]): Future[Result] = {
+    val updatedPlane: Plane = Plane("plane", planeId, name, description, content, alignment)
+    withNavCollection { (campaignId, journey) =>
+      campaignService.replaceElement(campaignId, updatedPlane).map {
+        case Right(_) => Redirect(controllers.routes.SelectController.show()).addingToSession(journeyKey -> (journey :+ updatedPlane.id).mkString(","))
+        case Left(CampaignNotFound) => NotFound(notFound())
+        case Left(_) => InternalServerError(internalServerError())
+      }
     }
   }
 

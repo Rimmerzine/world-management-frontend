@@ -5,6 +5,7 @@ import forms.CampaignForm.{campaignDescription, campaignName}
 import javax.inject.Inject
 import play.api.data.Form
 import play.api.i18n.{Langs, Messages, MessagesApi, MessagesImpl}
+import scalatags.Text.TypedTag
 import scalatags.Text.all._
 import views.MainTemplate
 import views.helpers.inputs.{InputTextWithLabel, TextAreaWithLabel}
@@ -20,7 +21,7 @@ trait CreateCampaign extends MainTemplate with InputTextWithLabel with TextAreaW
   val messages: Messages
   val appConfig: AppConfig
 
-  def apply(campaignForm: Form[(String, Option[String])]): String = mainTemplate(messages("create-campaign.title"), "8")(
+  def apply(campaignForm: Form[(String, Option[String])]): TypedTag[String] = mainTemplate(messages("create-campaign.title"), "8")(
     h1(messages("create-campaign.heading")),
     h2(cls := "header-medium")(messages("create-campaign.subheading")),
     form(action := controllers.campaigns.routes.CreateCampaignController.submit().url, method := "POST")(

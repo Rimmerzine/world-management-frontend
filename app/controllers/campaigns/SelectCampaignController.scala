@@ -7,7 +7,7 @@ import services.CampaignService
 import views.campaigns.SelectCampaign
 import views.errors.InternalServerError
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class SelectCampaignControllerImpl @Inject()(
                                               val controllerComponents: ControllerComponents,
@@ -26,9 +26,13 @@ trait SelectCampaignController extends FrontendController {
 
   def show: Action[AnyContent] = Action.async { implicit request =>
     campaignService.retrieveAllCampaigns.map {
-      case Right(campaigns) => Ok(selectCampaign(campaigns)).as("text/html")
-      case Left(_) => InternalServerError(internalServerError()).as("text/html")
+      case Right(campaigns) => Ok(selectCampaign(campaigns)).removingFromSession(journeyKey)
+      case Left(_) => InternalServerError(internalServerError())
     }
+  }
+
+  def view(id: String): Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Redirect(controllers.routes.SelectController.show()).addingToSession(journeyKey -> id))
   }
 
 }
