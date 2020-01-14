@@ -3,13 +3,13 @@ package connectors
 import helpers.UnitSpec
 import mockws.{MockWS, MockWSHelpers}
 import models.Campaign
+import models.ErrorModel.{CampaignNotFound, JsonParseError, UnexpectedStatus}
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
 import play.api.mvc.Result
 import play.api.mvc.Results._
 import play.api.test.Helpers._
-import utils.ErrorModel.{CampaignNotFound, JsonParseError, UnexpectedStatus}
-import utils.TestConstants
+import testutil.TestConstants
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

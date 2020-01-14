@@ -1,12 +1,13 @@
 package views.campaigns
 
-import _root_.models.Campaign
 import config.AppConfig
 import javax.inject.Inject
+import models.Campaign
 import play.api.i18n.{Langs, Messages, MessagesApi, MessagesImpl}
 import scalatags.Text.TypedTag
 import scalatags.Text.all._
 import views.MainTemplate
+import views.helpers.HtmlForm
 
 class DeleteCampaignImpl @Inject()(messagesApi: MessagesApi, langs: Langs, val appConfig: AppConfig) extends DeleteCampaign {
 
@@ -14,12 +15,11 @@ class DeleteCampaignImpl @Inject()(messagesApi: MessagesApi, langs: Langs, val a
 
 }
 
-trait DeleteCampaign extends MainTemplate {
+trait DeleteCampaign extends MainTemplate with HtmlForm {
 
   val messages: Messages
-  val appConfig: AppConfig
 
-  def apply(campaign: Campaign): TypedTag[String] = mainTemplate(messages("delete-campaign.title"), "8")(
+  def apply(campaign: Campaign): TypedTag[String] = mainTemplate(messages("delete-campaign.title"), twoThirdsWidth)(
     h1(messages("delete-campaign.heading")),
     h2(cls := "header-medium")(messages("delete-campaign.subheading")),
     div(cls := "form-group")(
@@ -35,7 +35,7 @@ trait DeleteCampaign extends MainTemplate {
       }
     ),
     div(cls := "form-group")(
-      form(action := controllers.campaigns.routes.DeleteCampaignController.submit(campaign.id).url, method := "POST")(
+      form(controllers.campaigns.routes.DeleteCampaignController.submit(campaign.id))(
         button(cls := "btn btn-success", aria.label := messages("delete-campaign.confirm.aria-label"))(messages("common.confirm"))
       )
     )

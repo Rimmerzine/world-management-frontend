@@ -1,6 +1,6 @@
 package views.helpers
 
-import models.{Campaign, Land, Plane, WorldElement}
+import models.{Campaign, Creature, Land, Plane, WorldElement}
 import play.api.i18n.Messages
 import scalatags.Text
 import scalatags.Text.TypedTag
@@ -18,56 +18,70 @@ trait Card {
     }
   }
 
-  def card(
-            elementId: String, heading: String, optBody: Option[String], viewLink: String, editLink: String, deleteLink: String
-          ): Text.TypedTag[String] = {
+  def cardLink(linkHref: String, linkText: String, ariaLabel: String): TypedTag[String] = {
+    a(cls := "card-link", href := linkHref, aria.label := ariaLabel)(linkText)
+  }
+
+  private val viewLink: (String, String) => TypedTag[String] = cardLink(_, messages("card.view"), _)
+  private val editLink: (String, String) => TypedTag[String] = cardLink(_, messages("card.edit"), _)
+  private val deleteLink: (String, String) => TypedTag[String] = cardLink(_, messages("card.delete"), _)
+
+  def card(heading: String, body: Option[Text.Modifier], links: List[TypedTag[String]]): Text.TypedTag[String] = {
     div(cls := "card")(
       div(cls := "card-header text-center bg-dark text-light")(heading),
-      optBody.map(div(cls := "card-body")(_)),
-      div(cls := "card-footer text-center")(
-        a(cls := "card-link", href := viewLink, aria.label := messages("card.view-aria", heading))(
-          messages("card.view")
-        ),
-        a(cls := "card-link", href := editLink, aria.label := messages("card.edit-aria", heading))(
-          messages("card.edit")
-        ),
-        a(cls := "card-link", href := deleteLink, aria.label := messages("card.delete-aria", heading))(
-          messages("card.delete")
+      body.map(bodyContent =>
+        div(cls := "card-body")(
+          bodyContent
         )
+      ),
+      div(cls := "card-footer text-center")(links)
+    )
+  }
+
+  def campaignCard(campaign: Campaign): TypedTag[String] = {
+    card(
+      campaign.name,
+      campaign.description.map(div(cls := "card-text")(_)),
+      List(
+        viewLink(controllers.campaigns.routes.SelectCampaignController.view(campaign.id).url, messages("card.view-aria", campaign.name)),
+        editLink(controllers.campaigns.routes.EditCampaignController.show(campaign.id).url, messages("card.edit-aria", campaign.name)),
+        deleteLink(controllers.campaigns.routes.DeleteCampaignController.show(campaign.id).url, messages("card.delete-aria", campaign.name))
       )
     )
   }
 
-  def campaignCard(campaign: Campaign): Text.TypedTag[String] = {
+  def planeCard(plane: Plane): TypedTag[String] = {
     card(
-      campaign.id,
-      campaign.name,
-      campaign.description,
-      controllers.campaigns.routes.SelectCampaignController.view(campaign.id).url,
-      controllers.campaigns.routes.EditCampaignController.show(campaign.id).url,
-      controllers.campaigns.routes.DeleteCampaignController.show(campaign.id).url
-    )
-  }
-
-  def planeCard(plane: Plane): Text.TypedTag[String] = {
-    card(
-      plane.id,
       s"${plane.name} - ${messages(s"alignment.${plane.alignment}")}",
-      plane.description,
-      controllers.routes.SelectController.view(plane.id).url,
-      controllers.planes.routes.EditPlaneController.show(plane.id).url,
-      controllers.planes.routes.DeletePlaneController.show(plane.id).url
+      plane.description.map(div(cls := "card-text")(_)),
+      List(
+        viewLink(controllers.routes.SelectController.view(plane.id).url, messages("card.view-aria", plane.name)),
+        editLink(controllers.planes.routes.EditPlaneController.show(plane.id).url, messages("card.view-aria", plane.name)),
+        deleteLink(controllers.planes.routes.DeletePlaneController.show(plane.id).url, messages("card.delete-aria", plane.name))
+      )
     )
   }
 
-  def landCard(land: Land): Text.TypedTag[String] = {
+  def landCard(land: Land): TypedTag[String] = {
     card(
-      land.id,
       land.name,
-      land.description,
-      controllers.routes.SelectController.view(land.id).url,
-      controllers.lands.routes.EditLandController.show(land.id).url,
-      controllers.lands.routes.DeleteLandController.show(land.id).url
+      land.description.map(div(cls := "card-text")(_)),
+      List(
+        viewLink(controllers.routes.SelectController.view(land.id).url, messages("card.view-aria", land.name)),
+        editLink(controllers.lands.routes.EditLandController.show(land.id).url, messages("card.view-aria", land.name)),
+        deleteLink(controllers.lands.routes.DeleteLandController.show(land.id).url, messages("card.delete-aria", land.name))
+      )
+    )
+  }
+
+  def creatureCard(creature: Creature): TypedTag[String] = {
+
+    card(
+      creature.detail.name,
+      Some(div(cls := "card-text")(
+        creature.detail.description
+      )),
+      List()
     )
   }
 

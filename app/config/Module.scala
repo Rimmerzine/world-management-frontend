@@ -4,11 +4,13 @@ import com.google.inject.AbstractModule
 import connectors._
 import controllers._
 import controllers.campaigns._
+import controllers.creatures._
 import controllers.lands._
 import controllers.planes._
 import services._
 import views._
 import views.campaigns._
+import views.creatures._
 import views.errors._
 import views.lands._
 import views.planes._
@@ -29,6 +31,8 @@ class Module extends AbstractModule {
 
   def bindConnectors(): Unit = {
     bind(classOf[CampaignConnector]).to(classOf[CampaignConnectorImpl]).asEagerSingleton()
+    bind(classOf[CreatureConnector]).to(classOf[CreatureConnectorImpl]).asEagerSingleton()
+    bind(classOf[CreateCreatureController]).to(classOf[CreateCreatureControllerImpl]).asEagerSingleton()
   }
 
   def bindControllers(): Unit = {
@@ -48,10 +52,15 @@ class Module extends AbstractModule {
     bind(classOf[DeleteLandController]).to(classOf[DeleteLandControllerImpl]).asEagerSingleton()
 
     bind(classOf[SelectController]).to(classOf[SelectControllerImpl]).asEagerSingleton()
+
+    bind(classOf[ToolsController]).to(classOf[ToolsControllerImpl]).asEagerSingleton()
+
+    bind(classOf[SelectCreatureController]).to(classOf[SelectCreatureControllerImpl]).asEagerSingleton()
   }
 
   def bindServices(): Unit = {
     bind(classOf[CampaignService]).to(classOf[CampaignServiceImpl]).asEagerSingleton()
+    bind(classOf[CreatureService]).to(classOf[CreatureServiceImpl]).asEagerSingleton()
   }
 
   def bindViews(): Unit = {
@@ -70,9 +79,13 @@ class Module extends AbstractModule {
 
     bind(classOf[InternalServerError]).to(classOf[InternalServerErrorImpl]).asEagerSingleton()
     bind(classOf[NotFound]).to(classOf[NotFoundImpl]).asEagerSingleton()
-    bind(classOf[OtherError]).to(classOf[OtherErrorImpl]).asEagerSingleton()
 
-    bind(classOf[SelectElement]).to(classOf[SelectElementImpl])
+    bind(classOf[SelectElement]).to(classOf[SelectElementImpl]).asEagerSingleton()
+
+    bind(classOf[Tools]).to(classOf[ToolsImpl]).asEagerSingleton()
+
+    bind(classOf[SelectCreature]).to(classOf[SelectCreatureImpl]).asEagerSingleton()
+    bind(classOf[CreateCreature]).to(classOf[CreateCreatureImpl]).asEagerSingleton()
   }
 
 }

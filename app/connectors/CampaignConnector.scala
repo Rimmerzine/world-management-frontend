@@ -2,13 +2,12 @@ package connectors
 
 import config.AppConfig
 import javax.inject.Inject
-import models.Campaign
+import models.ErrorModel.{CampaignNotFound, JsonParseError, UnexpectedStatus}
+import models.{Campaign, ErrorModel}
 import play.api.Logging
 import play.api.http.Status._
 import play.api.libs.json.{Json, Reads}
 import play.api.libs.ws.WSClient
-import utils.ErrorModel
-import utils.ErrorModel.{CampaignNotFound, JsonParseError, UnexpectedStatus}
 
 import scala.concurrent.{ExecutionContext, Future}
 

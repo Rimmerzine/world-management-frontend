@@ -8,6 +8,7 @@ import play.api.i18n.{Langs, Messages, MessagesApi, MessagesImpl}
 import scalatags.Text.TypedTag
 import scalatags.Text.all._
 import views.MainTemplate
+import views.helpers.HtmlForm
 import views.helpers.inputs.{InputTextWithLabel, TextAreaWithLabel}
 
 class CreateLandImpl @Inject()(messagesApi: MessagesApi, langs: Langs, val appConfig: AppConfig) extends CreateLand {
@@ -16,20 +17,19 @@ class CreateLandImpl @Inject()(messagesApi: MessagesApi, langs: Langs, val appCo
 
 }
 
-trait CreateLand extends MainTemplate with InputTextWithLabel with TextAreaWithLabel {
+trait CreateLand extends MainTemplate with InputTextWithLabel with TextAreaWithLabel with HtmlForm {
 
   val messages: Messages
-  val appConfig: AppConfig
 
-  def apply(landForm: Form[(String, Option[String])]): TypedTag[String] = mainTemplate(messages("create-land.title"), "8")(
+  def apply(landForm: Form[(String, Option[String])]): TypedTag[String] = mainTemplate(messages("create-land.title"), twoThirdsWidth)(
     h1(messages("create-land.heading")),
     h2(cls := "header-medium")(messages("create-land.subheading")),
-    form(action := controllers.lands.routes.CreateLandController.submit().url, method := "POST")(
+    form(controllers.lands.routes.CreateLandController.submit())(
       div(cls := "form-group")(
-        inputTextWithLabel(landForm(landName), landName, landName, messages("create-land.name.label"))
+        inputTextWithLabel(landForm(landName), messages("create-land.name.label"))
       ),
       div(cls := "form-group")(
-        textAreaWithLabel(landForm(landDescription), landDescription, landDescription, messages("create-land.description.label"))
+        textAreaWithLabel(landForm(landDescription), messages("create-land.description.label"))
       ),
       div(cls := "form-group")(
         button(cls := "btn btn-success", aria.label := messages("create-land.create.aria-label"))(messages("common.create"))

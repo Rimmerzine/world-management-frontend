@@ -5,18 +5,17 @@ import org.mockito.Mockito.when
 import play.api.i18n.DefaultMessagesApi
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import utils.TestConstants
-import views.errors.{InternalServerError, NotFound, OtherError}
+import testutil.TestConstants
+import views.errors.{InternalServerError, NotFound}
 
 class ErrorHandlerSpec extends UnitSpec with TestConstants {
 
   val internalServerError: InternalServerError = mock[InternalServerError]
   val notFound: NotFound = mock[NotFound]
-  val otherError: OtherError = mock[OtherError]
   val defaultMessagesApi: DefaultMessagesApi = new DefaultMessagesApi()
   val appConfig: AppConfig = mock[AppConfig]
 
-  val errorHandler: ErrorHandler = new ErrorHandler(internalServerError, notFound, otherError, defaultMessagesApi, appConfig)
+  val errorHandler: ErrorHandler = new ErrorHandler(internalServerError, notFound, defaultMessagesApi, appConfig)
 
   "onServerError" must {
     s"return $INTERNAL_SERVER_ERROR" in {
@@ -49,7 +48,7 @@ class ErrorHandlerSpec extends UnitSpec with TestConstants {
     }
     s"return the status the error was" when {
       s"the client error was any other type of client error" in {
-        when(otherError()) thenReturn emptyHtmlTag
+        when(internalServerError()) thenReturn emptyHtmlTag
 
         val result = errorHandler.onClientError(FakeRequest(), NOT_ACCEPTABLE, "not acceptable")
         status(result) mustBe NOT_ACCEPTABLE

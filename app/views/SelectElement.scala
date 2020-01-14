@@ -17,7 +17,6 @@ class SelectElementImpl @Inject()(messagesApi: MessagesApi, langs: Langs, val ap
 trait SelectElement extends MainTemplate with Card with CreateElementDropdownLinks {
 
   val messages: Messages
-  val appConfig: AppConfig
 
   def apply(campaignId: String, element: WorldElement): TypedTag[String] = mainTemplate(
     messages("select-element.title", messages(s"element.${element.elementType}"), element.name)

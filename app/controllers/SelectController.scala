@@ -1,28 +1,22 @@
 package controllers
 
+import controllers.utils.SessionKeys
 import javax.inject.Inject
+import models.ErrorModel.{CampaignNotFound, ElementNotFound}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import services.CampaignService
-import utils.ErrorModel.{CampaignNotFound, ElementNotFound}
 import views.SelectElement
-import views.errors.{InternalServerError, NotFound}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class SelectControllerImpl @Inject()(
-                                      val controllerComponents: ControllerComponents,
-                                      val campaignService: CampaignService,
-                                      val selectElement: SelectElement,
-                                      val notFound: NotFound,
-                                      val internalServerError: InternalServerError
-                                    ) extends SelectController
+class SelectControllerImpl @Inject()(val controllerComponents: ControllerComponents,
+                                     val campaignService: CampaignService,
+                                     val selectElement: SelectElement) extends SelectController
 
 trait SelectController extends FrontendController {
 
   val campaignService: CampaignService
   val selectElement: SelectElement
-  val notFound: NotFound
-  val internalServerError: InternalServerError
 
   implicit lazy val ec: ExecutionContext = controllerComponents.executionContext
 
@@ -30,22 +24,22 @@ trait SelectController extends FrontendController {
     withNavCollection { (campaignId, journey) =>
       campaignService.retrieveElement(campaignId, journey.reverse.head).map {
         case Right(element) => Ok(selectElement(campaignId, element))
-        case Left(CampaignNotFound | ElementNotFound) => NotFound(notFound())
-        case Left(_) => InternalServerError(internalServerError())
+        case Left(CampaignNotFound | ElementNotFound) => NotFound
+        case Left(_) => InternalServerError
       }
     }
   }
 
   def view(id: String): Action[AnyContent] = Action.async { implicit request =>
     withNavCollection { (_, journey) =>
-      Future.successful(Redirect(controllers.routes.SelectController.show()).addingToSession(journeyKey -> (journey :+ id).mkString(",")))
+      Future.successful(Redirect(controllers.routes.SelectController.show()).addingToSession(SessionKeys.journey -> (journey :+ id).mkString(",")))
     }
   }
 
   def back(): Action[AnyContent] = Action.async { implicit request =>
     withNavCollection { (campaignId, journey) =>
       Future.successful(
-        Redirect(controllers.routes.SelectController.show()).addingToSession(journeyKey -> journey.reverse.tail.reverse.mkString(","))
+        Redirect(controllers.routes.SelectController.show()).addingToSession(SessionKeys.journey -> journey.reverse.tail.reverse.mkString(","))
       )
     }
   }

@@ -4,7 +4,7 @@ import helpers.UnitSpec
 import play.api.data.{Form, FormError}
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
-import utils.TestConstants
+import testutil.TestConstants
 
 class PlaneFormSpec extends UnitSpec with TestConstants {
 
@@ -40,7 +40,7 @@ class PlaneFormSpec extends UnitSpec with TestConstants {
           PlaneForm.planeAlignment -> planeAlignment
         )
 
-        form.bindFromRequest().errors mustBe Seq(FormError(PlaneForm.planeName, PlaneForm.nameMissingError))
+        form.bindFromRequest().errors mustBe Seq(FormError(PlaneForm.planeName, PlaneForm.nameMissingError.key))
       }
       "plane name is longer than 50 characters" in new Setup {
         implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody(
@@ -48,14 +48,14 @@ class PlaneFormSpec extends UnitSpec with TestConstants {
           PlaneForm.planeAlignment -> planeAlignment
         )
 
-        form.bindFromRequest().errors mustBe Seq(FormError(PlaneForm.planeName, PlaneForm.nameTooLongError))
+        form.bindFromRequest().errors mustBe Seq(FormError(PlaneForm.planeName, PlaneForm.nameTooLongError.key))
       }
       "no alignment is provided" in new Setup {
         implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody(
           PlaneForm.planeName -> planeName
         )
 
-        form.bindFromRequest().errors mustBe Seq(FormError(PlaneForm.planeAlignment, PlaneForm.alignmentRequiredError))
+        form.bindFromRequest().errors mustBe Seq(FormError(PlaneForm.planeAlignment, PlaneForm.alignmentRequiredError.key))
       }
       "the alignment provided is not valid" in new Setup {
         implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody(
@@ -63,7 +63,7 @@ class PlaneFormSpec extends UnitSpec with TestConstants {
           PlaneForm.planeAlignment -> "invalid"
         )
 
-        form.bindFromRequest().errors mustBe Seq(FormError(PlaneForm.planeAlignment, PlaneForm.alignmentRequiredError))
+        form.bindFromRequest().errors mustBe Seq(FormError(PlaneForm.planeAlignment, PlaneForm.alignmentRequiredError.key))
       }
     }
   }

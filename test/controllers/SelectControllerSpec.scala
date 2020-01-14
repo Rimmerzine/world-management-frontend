@@ -1,16 +1,15 @@
 package controllers
 
 import helpers.UnitSpec
+import models.ErrorModel.{CampaignNotFound, ElementNotFound, UnexpectedStatus}
 import org.mockito.ArgumentMatchers.{any, eq => matches}
 import org.mockito.Mockito.when
 import play.api.mvc.{AnyContent, ControllerComponents, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CampaignService
-import utils.ErrorModel.{CampaignNotFound, ElementNotFound, UnexpectedStatus}
-import utils.TestConstants
+import testutil.TestConstants
 import views.SelectElement
-import views.errors.{InternalServerError, NotFound}
 
 import scala.concurrent.Future
 
@@ -20,8 +19,6 @@ class SelectControllerSpec extends UnitSpec with TestConstants {
 
     val mockCampaignService: CampaignService = mock[CampaignService]
     val mockSelectElement: SelectElement = mock[SelectElement]
-    val mockNotFound: NotFound = mock[NotFound]
-    val mockInternalServerError: InternalServerError = mock[InternalServerError]
 
     val fakeRequestWithSession: FakeRequest[AnyContent] = FakeRequest().withSession(
       "journey" -> s"${campaign.id},${plane.id}"
@@ -31,8 +28,6 @@ class SelectControllerSpec extends UnitSpec with TestConstants {
       val controllerComponents: ControllerComponents = stubControllerComponents()
       val campaignService: CampaignService = mockCampaignService
       val selectElement: SelectElement = mockSelectElement
-      val notFound: NotFound = mockNotFound
-      val internalServerError: InternalServerError = mockInternalServerError
     }
 
   }
@@ -52,32 +47,26 @@ class SelectControllerSpec extends UnitSpec with TestConstants {
     s"return $NOT_FOUND" when {
       "the campaign could not be found" in new Setup {
         when(mockCampaignService.retrieveElement(matches(campaign.id), matches(plane.id))(any())) thenReturn Future.successful(Left(CampaignNotFound))
-        when(mockNotFound()) thenReturn emptyHtmlTag
 
         val result: Future[Result] = controller.show()(fakeRequestWithSession)
 
         status(result) mustBe NOT_FOUND
-        contentType(result) mustBe Some("text/html")
       }
       "the element could not be found" in new Setup {
         when(mockCampaignService.retrieveElement(matches(campaign.id), matches(plane.id))(any())) thenReturn Future.successful(Left(ElementNotFound))
-        when(mockNotFound()) thenReturn emptyHtmlTag
 
         val result: Future[Result] = controller.show()(fakeRequestWithSession)
 
         status(result) mustBe NOT_FOUND
-        contentType(result) mustBe Some("text/html")
       }
     }
     s"return $INTERNAL_SERVER_ERROR" when {
       "there was a problem retrieving the element" in new Setup {
         when(mockCampaignService.retrieveElement(matches(campaign.id), matches(plane.id))(any())) thenReturn Future.successful(Left(UnexpectedStatus))
-        when(mockInternalServerError()) thenReturn emptyHtmlTag
 
         val result: Future[Result] = controller.show()(fakeRequestWithSession)
 
         status(result) mustBe INTERNAL_SERVER_ERROR
-        contentType(result) mustBe Some("text/html")
       }
     }
   }

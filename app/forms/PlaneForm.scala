@@ -24,22 +24,22 @@ object PlaneForm extends StopOnFirstFail with FormConstraints {
 
   val planeNameMaxLength: Int = 50
 
-  val nameMissingError: String = "error.plane.name.required"
-  val nameTooLongError: String = "error.plane.name.max-length"
+  val nameMissingError: ErrorWithArgs = ErrorWithArgs("error.plane.name.required")
+  val nameTooLongError: ErrorWithArgs = ErrorWithArgs("error.plane.name.max-length")
 
-  val alignmentRequiredError: String = "error.plane.alignment.required"
+  val alignmentRequiredError: ErrorWithArgs = ErrorWithArgs("error.plane.alignment.required")
 
   val form: Form[(String, Option[String], String)] = Form(
     tuple(
-      planeName -> default(text, "").verifying(stopOnFirstFail(
-        nonEmptyConstraint(nameMissingError),
-        maxLengthConstraint(planeNameMaxLength, nameTooLongError)
-      )),
+      planeName -> default(text, "").verifyingFirst(
+        nonEmpty(nameMissingError),
+        maxLength(planeNameMaxLength, nameTooLongError)
+      ),
       planeDescription -> optional(text),
-      planeAlignment -> default(text, "").verifying(stopOnFirstFail(
-        nonEmptyConstraint(alignmentRequiredError),
-        validOptionConstraint(alignmentOptions, alignmentRequiredError)
-      ))
+      planeAlignment -> default(text, "").verifyingFirst(
+        nonEmpty(alignmentRequiredError),
+        validOption(alignmentOptions, alignmentRequiredError)
+      )
     )
   )
 

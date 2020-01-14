@@ -1,11 +1,10 @@
 package controllers
 
 import helpers.UnitSpec
-import play.api.http.Status
-import play.api.mvc.{AnyContent, AnyContentAsEmpty, ControllerComponents, Result}
-import play.api.test.Helpers._
 import play.api.mvc.Results.Ok
+import play.api.mvc.{AnyContent, ControllerComponents, Result}
 import play.api.test.FakeRequest
+import play.api.test.Helpers._
 
 import scala.concurrent.Future
 

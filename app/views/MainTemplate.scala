@@ -3,6 +3,7 @@ package views
 import config.AppConfig
 import controllers.routes
 import play.api.i18n.Messages
+import scalatags.Text
 import scalatags.Text.TypedTag
 import scalatags.Text.all._
 import scalatags.Text.tags2.{nav, title}
@@ -12,13 +13,17 @@ trait MainTemplate {
   val messages: Messages
   val appConfig: AppConfig
 
+  val fullWidth: String = "12"
+  val twoThirdsWidth: String = "8"
+
   private val pageHead: String => TypedTag[String] = pageTitle =>
     head(
       title(messages(pageTitle)),
       meta(charset := "utf-8"),
       meta(charset := "viewport", content := "width=device-width, initial-scale=1, shrink-to-fit=no"),
       link(rel := "stylesheet", href := routes.Assets.versioned("stylesheets/bootstrap.css").url),
-      link(rel := "stylesheet", href := routes.Assets.versioned("stylesheets/custom.css").url)
+      link(rel := "stylesheet", href := routes.Assets.versioned("stylesheets/custom.css").url),
+      script(src := routes.Assets.versioned("javascript/custom.js").url)
     )
 
   private val topNavbar: TypedTag[String] = nav(cls := "navbar navbar-expand-lg navbar-dark bg-dark")(
@@ -47,15 +52,17 @@ trait MainTemplate {
             aria.haspopup := "true",
             aria.expanded := "false"
           )(messages("navbar.top.tools.dropdown")),
-          div(cls := "dropdown-menu", aria.labelledby := "navbar-dropdown-menu-link-top")
+          div(cls := "dropdown-menu", aria.labelledby := "navbar-dropdown-menu-link-top")(
+            a(cls := "dropdown-item", href := controllers.routes.ToolsController.show().url)(messages("navbar.top.tools.dropdown.tools"))
+          )
         )
       )
     )
   )
 
-  private def innerContent(contentWidth: String, innerHtml: TypedTag[String]*): TypedTag[String] = div(cls := "container-fluid")(
+  private def innerContent(contentWidth: String, innerHtml: Text.Modifier*): TypedTag[String] = div(cls := "container-fluid")(
     div(cls := "row justify-content-center")(
-      div(cls := "col-10 full-content-body very-light-gray")(
+      div(cls := "col-lg-10 full-content-body very-light-gray")(
         div(cls := "row justify-content-center")(
           div(cls := s"col-lg-$contentWidth")(
             innerHtml: _*
@@ -86,7 +93,7 @@ trait MainTemplate {
     )
   )
 
-  def mainTemplate(pageTitle: String, contentWidth: String = "12")(innerHtml: TypedTag[String]*): TypedTag[String] = {
+  def mainTemplate(pageTitle: String, contentWidth: String = fullWidth)(innerHtml: Text.Modifier*): TypedTag[String] = {
     scalatags.Text.all.html(lang := "en")(
       pageHead(pageTitle),
       body(

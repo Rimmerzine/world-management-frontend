@@ -16,9 +16,8 @@ class NotFoundImpl @Inject()(messagesApi: MessagesApi, langs: Langs, val appConf
 trait NotFound extends MainTemplate {
 
   val messages: Messages
-  val appConfig: AppConfig
 
-  def apply(): TypedTag[String] = mainTemplate(messages("error.not-found.title"), "8")(
+  def apply(): TypedTag[String] = mainTemplate(messages("error.not-found.title"), twoThirdsWidth)(
     h1(cls := "text-center")(messages("error.not-found.heading"))
   )
 

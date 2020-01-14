@@ -9,12 +9,12 @@ trait InputTextWithLabel {
 
   val messages: Messages
 
-  def inputTextWithLabel(inputField: Field, inputId: String, inputName: String, inputLabel: String, ariaLabel: Option[String] = None): Seq[TypedTag[String]] = {
+  def inputTextWithLabel(inputField: Field, inputLabel: String, ariaLabel: Option[String] = None): Seq[TypedTag[String]] = {
     val isInvalid: String = if (inputField.hasErrors) "is-invalid" else ""
     Seq(
-      label(`for` := inputId, ariaLabel.map(aria.label := _))(inputLabel),
-      input(`type` := "text", id := inputId, name := inputName, cls := s"form-control $isInvalid", inputField.value.map(value := _))
-    ) ++ (for (fieldError <- inputField.errors) yield div(cls := "invalid-feedback")(messages(fieldError.message)))
+      label(`for` := inputField.id, ariaLabel.map(aria.label := _))(inputLabel),
+      input(`type` := "text", id := inputField.id, name := inputField.name, cls := s"form-control $isInvalid", inputField.value.map(value := _))
+    ) ++ (for (fieldError <- inputField.errors) yield div(cls := "invalid-feedback")(messages(fieldError.message, fieldError.args: _*)))
   }
 
 }

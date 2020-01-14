@@ -4,13 +4,11 @@ import java.util.UUID
 
 import play.api.libs.json.{JsPath, Json, OFormat, Reads, _}
 
-case class Campaign(
-                     elementType: String,
-                     id: String,
-                     name: String,
-                     description: Option[String],
-                     content: List[WorldElement]
-                   ) extends WorldElement {
+case class Campaign(elementType: String,
+                    id: String,
+                    name: String,
+                    description: Option[String],
+                    content: List[WorldElement]) extends WorldElement {
 
   def updateContent(replacement: List[WorldElement]): WorldElement = this.copy(content = replacement)
 
@@ -25,14 +23,12 @@ object Campaign {
   }
 }
 
-case class Plane(
-                  elementType: String,
-                  id: String,
-                  name: String,
-                  description: Option[String],
-                  content: List[WorldElement],
-                  alignment: String
-                ) extends WorldElement {
+case class Plane(elementType: String,
+                 id: String,
+                 name: String,
+                 description: Option[String],
+                 content: List[WorldElement],
+                 alignment: String) extends WorldElement {
 
   def updateContent(replacement: List[WorldElement]): WorldElement = this.copy(content = replacement)
 
@@ -47,13 +43,11 @@ object Plane {
   }
 }
 
-case class Land(
-                 elementType: String,
-                 id: String,
-                 name: String,
-                 description: Option[String],
-                 content: List[WorldElement]
-               ) extends WorldElement {
+case class Land(elementType: String,
+                id: String,
+                name: String,
+                description: Option[String],
+                content: List[WorldElement]) extends WorldElement {
 
   def updateContent(replacement: List[WorldElement]): WorldElement = this.copy(content = replacement)
 

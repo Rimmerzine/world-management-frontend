@@ -3,6 +3,7 @@ package controllers.planes
 import config.AppConfig
 import forms.PlaneForm
 import helpers.UnitSpec
+import models.ErrorModel.{CampaignNotFound, UnexpectedStatus}
 import models.Plane
 import org.mockito.ArgumentMatchers.{any, eq => matches}
 import org.mockito.Mockito.when
@@ -10,9 +11,7 @@ import play.api.mvc.{AnyContent, AnyContentAsFormUrlEncoded, ControllerComponent
 import play.api.test.Helpers._
 import play.api.test.{FakeRequest, Helpers}
 import services.CampaignService
-import utils.ErrorModel.{CampaignNotFound, UnexpectedStatus}
-import utils.TestConstants
-import views.errors.{InternalServerError, NotFound}
+import testutil.TestConstants
 import views.planes.CreatePlane
 
 import scala.concurrent.Future
@@ -24,8 +23,6 @@ class CreatePlaneControllerSpec extends UnitSpec with TestConstants {
     val mockCampaignService: CampaignService = mock[CampaignService]
     val mockAppConfig: AppConfig = mock[AppConfig]
     val mockCreatePlane: CreatePlane = mock[CreatePlane]
-    val mockNotFound: NotFound = mock[NotFound]
-    val mockInternalServerError: InternalServerError = mock[InternalServerError]
 
     val fakeRequest: FakeRequest[AnyContent] = FakeRequest()
     val fakeRequestWithSessionAndForm: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withSession("journey" -> campaign.id).withFormUrlEncodedBody(
@@ -38,8 +35,6 @@ class CreatePlaneControllerSpec extends UnitSpec with TestConstants {
       val controllerComponents: ControllerComponents = Helpers.stubControllerComponents()
       val campaignService: CampaignService = mockCampaignService
       val createPlane: CreatePlane = mockCreatePlane
-      val notFound: NotFound = mockNotFound
-      val internalServerError: InternalServerError = mockInternalServerError
     }
 
   }
@@ -82,24 +77,20 @@ class CreatePlaneControllerSpec extends UnitSpec with TestConstants {
       "the campaign to add the element to could not be found" in new Setup {
         when(mockCampaignService.addElement(matches(campaign.id), matches(campaign.id), any[Plane])(any()))
           .thenReturn(Future.successful(Left(CampaignNotFound)))
-        when(mockNotFound()) thenReturn emptyHtmlTag
 
         val result: Future[Result] = controller.submit()(fakeRequestWithSessionAndForm)
 
         status(result) mustBe NOT_FOUND
-        contentType(result) mustBe Some("text/html")
       }
     }
     s"return $INTERNAL_SERVER_ERROR" when {
       "there was an error when adding the element to the campaign" in new Setup {
         when(mockCampaignService.addElement(matches(campaign.id), matches(campaign.id), any[Plane])(any()))
           .thenReturn(Future.successful(Left(UnexpectedStatus)))
-        when(mockInternalServerError()) thenReturn emptyHtmlTag
 
         val result: Future[Result] = controller.submit()(fakeRequestWithSessionAndForm)
 
         status(result) mustBe INTERNAL_SERVER_ERROR
-        contentType(result) mustBe Some("text/html")
       }
     }
   }

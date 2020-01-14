@@ -2,11 +2,11 @@ package services
 
 import connectors.CampaignConnector
 import helpers.UnitSpec
-import models.{Campaign, WorldElement}
+import models.ErrorModel.{CampaignNotFound, ElementNotFound, UnexpectedStatus}
+import models.{Campaign, ErrorModel, WorldElement}
 import org.mockito.ArgumentMatchers.{any, eq => matches}
 import org.mockito.Mockito.when
-import utils.ErrorModel.{CampaignNotFound, ElementNotFound, UnexpectedStatus}
-import utils.{ErrorModel, TestConstants}
+import testutil.TestConstants
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

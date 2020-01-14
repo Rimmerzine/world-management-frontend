@@ -2,16 +2,15 @@ package controllers.campaigns
 
 import forms.CampaignForm
 import helpers.UnitSpec
+import models.ErrorModel.UnexpectedStatus
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.mvc.{AnyContentAsFormUrlEncoded, ControllerComponents, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CampaignService
-import utils.ErrorModel.UnexpectedStatus
-import utils.TestConstants
+import testutil.TestConstants
 import views.campaigns.CreateCampaign
-import views.errors.InternalServerError
 
 import scala.concurrent.Future
 
@@ -21,13 +20,11 @@ class CreateCampaignControllerSpec extends UnitSpec with TestConstants {
 
     val mockCampaignService: CampaignService = mock[CampaignService]
     val mockCreateCampaign: CreateCampaign = mock[CreateCampaign]
-    val mockInternalServerError: InternalServerError = mock[InternalServerError]
 
     val controller: CreateCampaignController = new CreateCampaignController {
       val controllerComponents: ControllerComponents = stubControllerComponents()
       val campaignService: CampaignService = mockCampaignService
       val createCampaign: CreateCampaign = mockCreateCampaign
-      val internalServerError: InternalServerError = mockInternalServerError
     }
 
   }
@@ -57,7 +54,6 @@ class CreateCampaignControllerSpec extends UnitSpec with TestConstants {
     s"return $INTERNAL_SERVER_ERROR" when {
       "there was a problem creating a campaign" in new Setup {
         when(mockCampaignService.createCampaign(any())(any())) thenReturn Future.successful(Left(UnexpectedStatus))
-        when(mockInternalServerError()) thenReturn emptyHtmlTag
 
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody(
           CampaignForm.campaignName -> campaignName,
@@ -66,7 +62,6 @@ class CreateCampaignControllerSpec extends UnitSpec with TestConstants {
         val result: Future[Result] = controller.submit()(request)
 
         status(result) mustBe INTERNAL_SERVER_ERROR
-        contentType(result) mustBe Some("text/html")
       }
     }
     s"return $SEE_OTHER" when {

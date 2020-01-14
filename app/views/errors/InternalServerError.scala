@@ -16,9 +16,8 @@ class InternalServerErrorImpl @Inject()(messagesApi: MessagesApi, langs: Langs, 
 trait InternalServerError extends MainTemplate {
 
   val messages: Messages
-  val appConfig: AppConfig
 
-  def apply(): TypedTag[String] = mainTemplate(messages("error.internal-server-error.title"), "8")(
+  def apply(): TypedTag[String] = mainTemplate(messages("error.internal-server-error.title"), twoThirdsWidth)(
     h1(cls := "text-center")(messages("error.internal-server-error.heading")),
     h2(cls := "text-center")(messages("error.internal-server-error.subheading"))
   )

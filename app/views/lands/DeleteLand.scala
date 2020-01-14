@@ -1,12 +1,13 @@
 package views.lands
 
-import _root_.models.Land
 import config.AppConfig
 import javax.inject.Inject
+import models.Land
 import play.api.i18n.{Langs, Messages, MessagesApi, MessagesImpl}
 import scalatags.Text.TypedTag
 import scalatags.Text.all._
 import views.MainTemplate
+import views.helpers.HtmlForm
 
 class DeleteLandImpl @Inject()(messagesApi: MessagesApi, langs: Langs, val appConfig: AppConfig) extends DeleteLand {
 
@@ -14,12 +15,11 @@ class DeleteLandImpl @Inject()(messagesApi: MessagesApi, langs: Langs, val appCo
 
 }
 
-trait DeleteLand extends MainTemplate {
+trait DeleteLand extends MainTemplate with HtmlForm {
 
   val messages: Messages
-  val appConfig: AppConfig
 
-  def apply(land: Land): TypedTag[String] = mainTemplate(messages("delete-land.title"), "8")(
+  def apply(land: Land): TypedTag[String] = mainTemplate(messages("delete-land.title"), twoThirdsWidth)(
     h1(messages("delete-land.heading")),
     h2(cls := "header-medium")(messages("delete-land.subheading")),
     div(cls := "form-group")(
@@ -35,7 +35,7 @@ trait DeleteLand extends MainTemplate {
       }
     ),
     div(cls := "form-group")(
-      form(action := controllers.lands.routes.DeleteLandController.submit(land.id).url, method := "POST")(
+      form(controllers.lands.routes.DeleteLandController.submit(land.id))(
         button(cls := "btn btn-success", aria.label := messages("delete-land.confirm.aria-label"))(messages("common.confirm"))
       )
     )

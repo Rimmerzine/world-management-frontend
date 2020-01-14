@@ -2,7 +2,7 @@ package models
 
 import helpers.UnitSpec
 import play.api.libs.json._
-import utils.TestConstants
+import testutil.TestConstants
 
 class WorldElementSpec extends UnitSpec with TestConstants {
 

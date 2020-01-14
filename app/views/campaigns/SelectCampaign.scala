@@ -1,8 +1,8 @@
 package views.campaigns
 
-import _root_.models.Campaign
 import config.AppConfig
 import javax.inject.Inject
+import models.Campaign
 import play.api.i18n.{Langs, Messages, MessagesApi, MessagesImpl}
 import scalatags.Text.TypedTag
 import scalatags.Text.all._
@@ -18,7 +18,6 @@ class SelectCampaignImpl @Inject()(messagesApi: MessagesApi, langs: Langs, val a
 trait SelectCampaign extends MainTemplate with Card {
 
   val messages: Messages
-  val appConfig: AppConfig
 
   def apply(campaigns: List[Campaign]): TypedTag[String] = mainTemplate(messages("select-campaign.title"))(
     h1(cls := "text-center")(messages("select-campaign.heading")),

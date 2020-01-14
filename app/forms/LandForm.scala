@@ -10,17 +10,15 @@ object LandForm extends StopOnFirstFail with FormConstraints {
 
   val landMaxLength: Int = 50
 
-  val nameMissingError: String = "error.land.name.required"
-  val nameTooLongError: String = "error.land.name.max-length"
-
-  val alignmentRequiredError: String = "error.land.alignment.required"
+  val nameMissingError: ErrorWithArgs = ErrorWithArgs("error.land.name.required")
+  val nameTooLongError: ErrorWithArgs = ErrorWithArgs("error.land.name.max-length")
 
   val form: Form[(String, Option[String])] = Form(
     tuple(
-      landName -> default(text, "").verifying(stopOnFirstFail(
-        nonEmptyConstraint(nameMissingError),
-        maxLengthConstraint(landMaxLength, nameTooLongError)
-      )),
+      landName -> default(text, "").verifyingFirst(
+        nonEmpty(nameMissingError),
+        maxLength(landMaxLength, nameTooLongError)
+      ),
       landDescription -> optional(text)
     )
   )

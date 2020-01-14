@@ -4,7 +4,7 @@ import helpers.UnitSpec
 import play.api.data.{Form, FormError}
 import play.api.mvc.{AnyContentAsEmpty, AnyContentAsFormUrlEncoded}
 import play.api.test.FakeRequest
-import utils.TestConstants
+import testutil.TestConstants
 
 class LandFormSpec extends UnitSpec with TestConstants {
 
@@ -36,14 +36,14 @@ class LandFormSpec extends UnitSpec with TestConstants {
       "no land name is provided" in new Setup {
         implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody()
 
-        form.bindFromRequest().errors mustBe Seq(FormError(LandForm.landName, LandForm.nameMissingError))
+        form.bindFromRequest().errors mustBe Seq(FormError(LandForm.landName, LandForm.nameMissingError.key))
       }
       "land name is longer than 50 characters" in new Setup {
         implicit val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody(
           LandForm.landName -> ("A" * 51)
         )
 
-        form.bindFromRequest().errors mustBe Seq(FormError(LandForm.landName, LandForm.nameTooLongError))
+        form.bindFromRequest().errors mustBe Seq(FormError(LandForm.landName, LandForm.nameTooLongError.key))
       }
     }
   }

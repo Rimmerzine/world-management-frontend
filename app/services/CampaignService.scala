@@ -2,9 +2,8 @@ package services
 
 import connectors.CampaignConnector
 import javax.inject.Inject
-import models.{Campaign, WorldElement}
-import utils.ErrorModel
-import utils.ErrorModel.ElementNotFound
+import models.ErrorModel.ElementNotFound
+import models.{Campaign, ErrorModel, WorldElement}
 
 import scala.concurrent.{ExecutionContext, Future}
 

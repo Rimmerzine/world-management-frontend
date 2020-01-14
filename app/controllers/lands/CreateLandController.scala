@@ -1,32 +1,27 @@
 package controllers.lands
 
 import controllers.FrontendController
+import controllers.utils.SessionKeys
 import forms.LandForm
 import javax.inject.Inject
+import models.ErrorModel.CampaignNotFound
 import models.Land
 import play.api.data.Form
 import play.api.mvc._
 import services.CampaignService
-import utils.ErrorModel.CampaignNotFound
-import views.errors.{InternalServerError, NotFound}
 import views.lands.CreateLand
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CreateLandControllerImpl @Inject()(
-                                          val controllerComponents: ControllerComponents,
-                                          val campaignService: CampaignService,
-                                          val createLand: CreateLand,
-                                          val notFound: NotFound,
-                                          val internalServerError: InternalServerError
-                                        ) extends CreateLandController
+class CreateLandControllerImpl @Inject()(val controllerComponents: ControllerComponents,
+                                         val campaignService: CampaignService,
+                                         val createLand: CreateLand) extends CreateLandController
 
 trait CreateLandController extends FrontendController {
 
   val campaignService: CampaignService
   val createLand: CreateLand
-  val notFound: NotFound
-  val internalServerError: InternalServerError
+
   val landForm: Form[(String, Option[String])] = LandForm.form
 
   implicit lazy val ec: ExecutionContext = controllerComponents.executionContext
@@ -47,9 +42,9 @@ trait CreateLandController extends FrontendController {
 
     withNavCollection { (campaignId, journey) =>
       campaignService.addElement(campaignId, journey.reverse.head, newLand) map {
-        case Right(_) => Redirect(controllers.routes.SelectController.show()).addingToSession(journeyKey -> (journey :+ newLand.id).mkString(","))
-        case Left(CampaignNotFound) => NotFound(notFound())
-        case Left(_) => InternalServerError(internalServerError())
+        case Right(_) => Redirect(controllers.routes.SelectController.show()).addingToSession(SessionKeys.journey -> (journey :+ newLand.id).mkString(","))
+        case Left(CampaignNotFound) => NotFound
+        case Left(_) => InternalServerError
       }
     }
   }
