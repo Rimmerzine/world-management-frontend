@@ -155,7 +155,7 @@ object Skills {
     survival
   )
 
-  val options: List[String] = List("none", "proficient", "expertise")
+  val options: List[String] = List("none", "proficiency", "expertise")
 
 }
 
