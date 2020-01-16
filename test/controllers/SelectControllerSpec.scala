@@ -4,7 +4,7 @@ import helpers.UnitSpec
 import models.ErrorModel.{CampaignNotFound, ElementNotFound, UnexpectedStatus}
 import org.mockito.ArgumentMatchers.{any, eq => matches}
 import org.mockito.Mockito.when
-import play.api.mvc.{AnyContent, ControllerComponents, Result}
+import play.api.mvc.{AnyContent, MessagesControllerComponents, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CampaignService
@@ -25,7 +25,7 @@ class SelectControllerSpec extends UnitSpec with TestConstants {
     )
 
     val controller: SelectController = new SelectController {
-      val controllerComponents: ControllerComponents = stubControllerComponents()
+      val controllerComponents: MessagesControllerComponents = stubMessagesControllerComponents()
       val campaignService: CampaignService = mockCampaignService
       val selectElement: SelectElement = mockSelectElement
     }
@@ -36,7 +36,7 @@ class SelectControllerSpec extends UnitSpec with TestConstants {
     s"return $OK" when {
       "the element to show is retrieved" in new Setup {
         when(mockCampaignService.retrieveElement(matches(campaign.id), matches(plane.id))(any())) thenReturn Future.successful(Right(plane))
-        when(mockSelectElement(matches(campaign.id), matches(plane))) thenReturn emptyHtmlTag
+        when(mockSelectElement(matches(campaign.id), matches(plane))(any())) thenReturn emptyHtmlTag
 
         val result: Future[Result] = controller.show()(fakeRequestWithSession)
 

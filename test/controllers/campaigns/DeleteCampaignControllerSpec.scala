@@ -4,7 +4,7 @@ import helpers.UnitSpec
 import models.ErrorModel.{CampaignNotFound, UnexpectedStatus}
 import org.mockito.ArgumentMatchers.{any, eq => matches}
 import org.mockito.Mockito.when
-import play.api.mvc.{ControllerComponents, Result}
+import play.api.mvc.{MessagesControllerComponents, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CampaignService
@@ -21,7 +21,7 @@ class DeleteCampaignControllerSpec extends UnitSpec with TestConstants {
     val mockDeleteCampaign: DeleteCampaign = mock[DeleteCampaign]
 
     val controller: DeleteCampaignController = new DeleteCampaignController {
-      val controllerComponents: ControllerComponents = stubControllerComponents()
+      val controllerComponents: MessagesControllerComponents = stubMessagesControllerComponents()
       val campaignService: CampaignService = mockCampaignService
       val deleteCampaign: DeleteCampaign = mockDeleteCampaign
     }
@@ -32,7 +32,7 @@ class DeleteCampaignControllerSpec extends UnitSpec with TestConstants {
     s"return $OK" when {
       "a campaign is returned from the service" in new Setup {
         when(mockCampaignService.retrieveCampaign(matches(campaign.id))(any())) thenReturn Future.successful(Right(campaign))
-        when(mockDeleteCampaign(matches(campaign))) thenReturn emptyHtmlTag
+        when(mockDeleteCampaign(matches(campaign))(any())) thenReturn emptyHtmlTag
 
         val result: Future[Result] = controller.show(campaign.id)(FakeRequest())
         status(result) mustBe OK

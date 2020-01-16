@@ -7,13 +7,12 @@ import scalatags.Text.all._
 
 trait DropdownWithLabel {
 
-  val messages: Messages
-
   def dropdownWithLabel(inputField: Field,
                         options: List[(String, String)],
                         inputLabel: String,
                         ariaLabel: Option[String] = None,
-                        includeSelectOption: Boolean = false): Seq[TypedTag[String]] = {
+                        includeSelectOption: Boolean = false)
+                       (implicit messages: Messages): Seq[TypedTag[String]] = {
 
     val isInvalid: String = if (inputField.hasErrors) "is-invalid" else ""
 

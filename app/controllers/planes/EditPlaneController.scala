@@ -13,7 +13,7 @@ import views.planes.EditPlane
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class EditPlaneControllerImpl @Inject()(val controllerComponents: ControllerComponents,
+class EditPlaneControllerImpl @Inject()(val controllerComponents: MessagesControllerComponents,
                                         val campaignService: CampaignService,
                                         val editPlane: EditPlane) extends EditPlaneController
 

@@ -6,8 +6,6 @@ import scalatags.Text.all._
 
 trait CreateElementDropdownLinks {
 
-  val messages: Messages
-
   private val elementCreateRoutes: List[(String, String)] = List(
     "campaign" -> controllers.campaigns.routes.CreateCampaignController.show().url,
     "plane" -> controllers.planes.routes.CreatePlaneController.show().url,
@@ -16,7 +14,7 @@ trait CreateElementDropdownLinks {
 
   private val allowedCreateRoutes: String => List[(String, String)] = elementType => elementCreateRoutes.dropWhile(_._1 != elementType).tail
 
-  def createLinks(currentElementType: String): TypedTag[String] = {
+  def createLinks(currentElementType: String)(implicit messages: Messages): TypedTag[String] = {
     div(cls := "dropdown show")(
       a(
         cls := "btn btn-success btn-block dropdown-toggle",

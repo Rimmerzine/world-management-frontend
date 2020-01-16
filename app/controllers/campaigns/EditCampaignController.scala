@@ -13,7 +13,7 @@ import views.campaigns.EditCampaign
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class EditCampaignControllerImpl @Inject()(val controllerComponents: ControllerComponents,
+class EditCampaignControllerImpl @Inject()(val controllerComponents: MessagesControllerComponents,
                                            val campaignService: CampaignService,
                                            val editCampaign: EditCampaign) extends EditCampaignController
 

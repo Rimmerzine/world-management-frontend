@@ -5,13 +5,13 @@ import forms.CreatureForm
 import javax.inject.Inject
 import models.{Creature, CreatureDetail}
 import play.api.data.Form
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.CreatureService
 import views.creatures.CreateCreature
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CreateCreatureControllerImpl @Inject()(val controllerComponents: ControllerComponents,
+class CreateCreatureControllerImpl @Inject()(val controllerComponents: MessagesControllerComponents,
                                              val creatureService: CreatureService,
                                              val createCreature: CreateCreature) extends CreateCreatureController
 

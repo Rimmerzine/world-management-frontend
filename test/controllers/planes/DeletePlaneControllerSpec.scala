@@ -4,9 +4,9 @@ import helpers.UnitSpec
 import models.ErrorModel.{CampaignNotFound, ElementNotFound, UnexpectedStatus}
 import org.mockito.ArgumentMatchers.{any, eq => matches}
 import org.mockito.Mockito.when
-import play.api.mvc.{AnyContent, ControllerComponents, Result}
+import play.api.mvc.{AnyContent, MessagesControllerComponents, Result}
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.api.test.{FakeRequest, Helpers}
 import services.CampaignService
 import testutil.TestConstants
 import views.planes.DeletePlane
@@ -25,7 +25,7 @@ class DeletePlaneControllerSpec extends UnitSpec with TestConstants {
     )
 
     val controller: DeletePlaneController = new DeletePlaneController {
-      val controllerComponents: ControllerComponents = Helpers.stubControllerComponents()
+      val controllerComponents: MessagesControllerComponents = stubMessagesControllerComponents()
       val campaignService: CampaignService = mockCampaignService
       val deletePlane: DeletePlane = mockDeletePlane
     }
@@ -36,7 +36,7 @@ class DeletePlaneControllerSpec extends UnitSpec with TestConstants {
     s"return $OK" when {
       "the plane is retrieved from the campaign" in new Setup {
         when(mockCampaignService.retrieveElement(matches(campaign.id), matches(plane.id))(any())) thenReturn Future.successful(Right(plane))
-        when(mockDeletePlane(plane)) thenReturn emptyHtmlTag
+        when(mockDeletePlane(matches(plane))(any())) thenReturn emptyHtmlTag
 
         val result: Future[Result] = controller.show(plane.id)(fakeRequestWithSession)
 

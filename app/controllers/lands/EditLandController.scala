@@ -13,7 +13,7 @@ import views.lands.EditLand
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class EditLandControllerImpl @Inject()(val controllerComponents: ControllerComponents,
+class EditLandControllerImpl @Inject()(val controllerComponents: MessagesControllerComponents,
                                        val campaignService: CampaignService,
                                        val editLand: EditLand) extends EditLandController
 

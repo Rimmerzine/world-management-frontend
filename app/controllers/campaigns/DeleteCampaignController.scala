@@ -9,7 +9,7 @@ import views.campaigns.DeleteCampaign
 
 import scala.concurrent.ExecutionContext
 
-class DeleteCampaignControllerImpl @Inject()(val controllerComponents: ControllerComponents,
+class DeleteCampaignControllerImpl @Inject()(val controllerComponents: MessagesControllerComponents,
                                              val campaignService: CampaignService,
                                              val deleteCampaign: DeleteCampaign) extends DeleteCampaignController
 

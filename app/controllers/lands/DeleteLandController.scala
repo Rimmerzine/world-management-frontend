@@ -4,13 +4,13 @@ import controllers.FrontendController
 import javax.inject.Inject
 import models.ErrorModel.{CampaignNotFound, ElementNotFound}
 import models.Land
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.CampaignService
 import views.lands.DeleteLand
 
 import scala.concurrent.ExecutionContext
 
-class DeleteLandControllerImpl @Inject()(val controllerComponents: ControllerComponents,
+class DeleteLandControllerImpl @Inject()(val controllerComponents: MessagesControllerComponents,
                                          val campaignService: CampaignService,
                                          val deleteLand: DeleteLand) extends DeleteLandController
 

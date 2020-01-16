@@ -7,7 +7,7 @@ import play.api.mvc._
 
 import scala.concurrent.Future
 
-trait FrontendController extends BaseController with I18nSupport with Logging with WritableTag {
+trait FrontendController extends MessagesBaseController with Logging with WritableTag {
 
   def withNavCollection(func: (String, List[String]) => Future[Result])(implicit request: Request[AnyContent]): Future[Result] = {
     request.session.get(SessionKeys.journey) match {

@@ -10,13 +10,12 @@ import scalatags.Text.tags2.{nav, title}
 
 trait MainTemplate {
 
-  val messages: Messages
   val appConfig: AppConfig
 
   val fullWidth: String = "12"
   val twoThirdsWidth: String = "8"
 
-  private val pageHead: String => TypedTag[String] = pageTitle =>
+  private def pageHead(pageTitle: String)(implicit messages: Messages): TypedTag[String] = {
     head(
       title(messages(pageTitle)),
       meta(charset := "utf-8"),
@@ -25,75 +24,82 @@ trait MainTemplate {
       link(rel := "stylesheet", href := routes.Assets.versioned("stylesheets/custom.css").url),
       script(src := routes.Assets.versioned("javascript/custom.js").url)
     )
+  }
 
-  private val topNavbar: TypedTag[String] = nav(cls := "navbar navbar-expand-lg navbar-dark bg-dark")(
-    div(cls := "navbar-brand")(messages("navbar.top.brand")),
-    button(
-      cls := "navbar-toggler",
-      `type` := "button",
-      data("toggle") := "collapse",
-      data("target") := "#navbar-nav-top",
-      aria.controls := "navbar-nav-bottom",
-      aria.expanded := "false",
-      aria.label := messages("navbar.bottom.toggle.aria")
-    )(span(cls := "navbar-toggler-icon")),
-    div(id := "navbar-nav-top", cls := "collapse navbar-collapse")(
-      ul(cls := "navbar-nav")(
-        li(cls := "nav-item")(
-          a(cls := "nav-link", href := appConfig.homeLink)(messages("navbar.top.links.home"))
-        ),
-        li(cls := "nav-item dropdown")(
-          a(
-            cls := "nav-link dropdown-toggle",
-            href := "#",
-            id := "navbar-dropdown-menu-link-top",
-            role := "button",
-            data("toggle") := "dropdown",
-            aria.haspopup := "true",
-            aria.expanded := "false"
-          )(messages("navbar.top.tools.dropdown")),
-          div(cls := "dropdown-menu", aria.labelledby := "navbar-dropdown-menu-link-top")(
-            a(cls := "dropdown-item", href := controllers.routes.ToolsController.show().url)(messages("navbar.top.tools.dropdown.tools"))
+  private def topNavbar(implicit messages: Messages): TypedTag[String] = {
+    nav(cls := "navbar navbar-expand-lg navbar-dark bg-dark")(
+      div(cls := "navbar-brand")(messages("navbar.top.brand")),
+      button(
+        cls := "navbar-toggler",
+        `type` := "button",
+        data("toggle") := "collapse",
+        data("target") := "#navbar-nav-top",
+        aria.controls := "navbar-nav-bottom",
+        aria.expanded := "false",
+        aria.label := messages("navbar.bottom.toggle.aria")
+      )(span(cls := "navbar-toggler-icon")),
+      div(id := "navbar-nav-top", cls := "collapse navbar-collapse")(
+        ul(cls := "navbar-nav")(
+          li(cls := "nav-item")(
+            a(cls := "nav-link", href := appConfig.homeLink)(messages("navbar.top.links.home"))
+          ),
+          li(cls := "nav-item dropdown")(
+            a(
+              cls := "nav-link dropdown-toggle",
+              href := "#",
+              id := "navbar-dropdown-menu-link-top",
+              role := "button",
+              data("toggle") := "dropdown",
+              aria.haspopup := "true",
+              aria.expanded := "false"
+            )(messages("navbar.top.tools.dropdown")),
+            div(cls := "dropdown-menu", aria.labelledby := "navbar-dropdown-menu-link-top")(
+              a(cls := "dropdown-item", href := controllers.routes.ToolsController.show().url)(messages("navbar.top.tools.dropdown.tools"))
+            )
           )
         )
       )
     )
-  )
+  }
 
-  private def innerContent(contentWidth: String, innerHtml: Text.Modifier*): TypedTag[String] = div(cls := "container-fluid")(
-    div(cls := "row justify-content-center")(
-      div(cls := "col-lg-10 full-content-body very-light-gray")(
-        div(cls := "row justify-content-center")(
-          div(cls := s"col-lg-$contentWidth")(
-            innerHtml: _*
+  private def innerContent(contentWidth: String, innerHtml: Text.Modifier*)(implicit messages: Messages): TypedTag[String] = {
+    div(cls := "container-fluid")(
+      div(cls := "row justify-content-center")(
+        div(cls := "col-lg-10 full-content-body very-light-gray")(
+          div(cls := "row justify-content-center")(
+            div(cls := s"col-lg-$contentWidth")(
+              innerHtml: _*
+            )
           )
         )
       )
     )
-  )
+  }
 
-  private val bottomNavbar: TypedTag[String] = nav(cls := "navbar navbar-expand-lg navbar-dark bg-dark")(
-    div(cls := "navbar-brand")(messages("navbar.bottom.brand")),
-    button(
-      cls := "navbar-toggler",
-      `type` := "button",
-      data("toggle") := "collapse",
-      data("target") := "#navbar-nav-bottom",
-      aria.controls := "navbar-nav-bottom",
-      aria.expanded := "false",
-      aria.label := messages("navbar.bottom.toggle.aria")
-    )(span(cls := "navbar-toggler-icon")),
-    div(id := "navbar-nav-bottom", cls := "collapse navbar-collapse")(
-      div(cls := "navbar-nav")(
-        a(cls := "nav-item nav-link", target := "_blank", rel := "noreferer", href := appConfig.githubLink)(
-          span(messages("navbar.bottom.github")),
-          span(cls := "sr-only")(messages("common.opens-in-new-tab"))
+  private def bottomNavbar(implicit messages: Messages): TypedTag[String] = {
+    nav(cls := "navbar navbar-expand-lg navbar-dark bg-dark")(
+      div(cls := "navbar-brand")(messages("navbar.bottom.brand")),
+      button(
+        cls := "navbar-toggler",
+        `type` := "button",
+        data("toggle") := "collapse",
+        data("target") := "#navbar-nav-bottom",
+        aria.controls := "navbar-nav-bottom",
+        aria.expanded := "false",
+        aria.label := messages("navbar.bottom.toggle.aria")
+      )(span(cls := "navbar-toggler-icon")),
+      div(id := "navbar-nav-bottom", cls := "collapse navbar-collapse")(
+        div(cls := "navbar-nav")(
+          a(cls := "nav-item nav-link", target := "_blank", rel := "noreferer", href := appConfig.githubLink)(
+            span(messages("navbar.bottom.github")),
+            span(cls := "sr-only")(messages("common.opens-in-new-tab"))
+          )
         )
       )
     )
-  )
+  }
 
-  def mainTemplate(pageTitle: String, contentWidth: String = fullWidth)(innerHtml: Text.Modifier*): TypedTag[String] = {
+  def mainTemplate(pageTitle: String, contentWidth: String = fullWidth)(innerHtml: Text.Modifier*)(implicit messages: Messages): TypedTag[String] = {
     scalatags.Text.all.html(lang := "en")(
       pageHead(pageTitle),
       body(

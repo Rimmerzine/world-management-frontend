@@ -6,7 +6,7 @@ import models.ErrorModel.{CampaignNotFound, UnexpectedStatus}
 import models.Land
 import org.mockito.ArgumentMatchers.{any, eq => matches}
 import org.mockito.Mockito.when
-import play.api.mvc.{AnyContent, AnyContentAsFormUrlEncoded, ControllerComponents, Result}
+import play.api.mvc.{AnyContent, AnyContentAsFormUrlEncoded, MessagesControllerComponents, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CampaignService
@@ -29,7 +29,7 @@ class CreateLandControllerSpec extends UnitSpec with TestConstants {
     )
 
     val controller: CreateLandController = new CreateLandController {
-      val controllerComponents: ControllerComponents = stubControllerComponents()
+      val controllerComponents: MessagesControllerComponents = stubMessagesControllerComponents()
       val campaignService: CampaignService = mockCampaignService
       val createLand: CreateLand = mockCreateLand
     }
@@ -38,7 +38,7 @@ class CreateLandControllerSpec extends UnitSpec with TestConstants {
 
   "show" must {
     s"return $OK" in new Setup {
-      when(mockCreateLand(any())) thenReturn emptyHtmlTag
+      when(mockCreateLand(any())(any())) thenReturn emptyHtmlTag
 
       val result: Future[Result] = controller.show()(fakeRequest)
 
@@ -50,7 +50,7 @@ class CreateLandControllerSpec extends UnitSpec with TestConstants {
   "submit" must {
     s"return $BAD_REQUEST" when {
       "the form has errors" in new Setup {
-        when(mockCreateLand(any())) thenReturn emptyHtmlTag
+        when(mockCreateLand(any())(any())) thenReturn emptyHtmlTag
 
         val result: Future[Result] = controller.submit()(fakeRequest)
 

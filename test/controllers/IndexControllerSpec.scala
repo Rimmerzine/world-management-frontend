@@ -1,7 +1,7 @@
 package controllers
 
 import helpers.UnitSpec
-import play.api.mvc.{ControllerComponents, Result}
+import play.api.mvc.{MessagesControllerComponents, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
@@ -11,7 +11,7 @@ class IndexControllerSpec extends UnitSpec {
 
   trait Setup {
     val controller: IndexController = new IndexController() {
-      val controllerComponents: ControllerComponents = stubControllerComponents()
+      val controllerComponents: MessagesControllerComponents = stubMessagesControllerComponents()
     }
   }
 

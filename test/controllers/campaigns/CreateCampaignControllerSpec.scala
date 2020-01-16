@@ -5,7 +5,7 @@ import helpers.UnitSpec
 import models.ErrorModel.UnexpectedStatus
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
-import play.api.mvc.{AnyContentAsFormUrlEncoded, ControllerComponents, Result}
+import play.api.mvc.{AnyContentAsFormUrlEncoded, MessagesControllerComponents, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CampaignService
@@ -22,7 +22,7 @@ class CreateCampaignControllerSpec extends UnitSpec with TestConstants {
     val mockCreateCampaign: CreateCampaign = mock[CreateCampaign]
 
     val controller: CreateCampaignController = new CreateCampaignController {
-      val controllerComponents: ControllerComponents = stubControllerComponents()
+      val controllerComponents: MessagesControllerComponents = stubMessagesControllerComponents()
       val campaignService: CampaignService = mockCampaignService
       val createCampaign: CreateCampaign = mockCreateCampaign
     }
@@ -31,7 +31,7 @@ class CreateCampaignControllerSpec extends UnitSpec with TestConstants {
 
   "show" must {
     s"return $OK" in new Setup {
-      when(mockCreateCampaign(any())) thenReturn emptyHtmlTag
+      when(mockCreateCampaign(any())(any())) thenReturn emptyHtmlTag
 
       val result: Future[Result] = controller.show()(FakeRequest())
       status(result) mustBe OK
@@ -42,7 +42,7 @@ class CreateCampaignControllerSpec extends UnitSpec with TestConstants {
   "submit" must {
     s"return $BAD_REQUEST" when {
       "the form had errors" in new Setup {
-        when(mockCreateCampaign(any())) thenReturn emptyHtmlTag
+        when(mockCreateCampaign(any())(any())) thenReturn emptyHtmlTag
 
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody()
         val result: Future[Result] = controller.submit()(request)

@@ -5,9 +5,9 @@ import helpers.UnitSpec
 import models.ErrorModel.{CampaignNotFound, ElementNotFound, UnexpectedStatus}
 import org.mockito.ArgumentMatchers.{any, eq => matches}
 import org.mockito.Mockito.when
-import play.api.mvc.{AnyContent, AnyContentAsFormUrlEncoded, ControllerComponents, Result}
+import play.api.mvc.{AnyContent, AnyContentAsFormUrlEncoded, MessagesControllerComponents, Result}
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.api.test.{FakeRequest, Helpers}
 import services.CampaignService
 import testutil.TestConstants
 import views.planes.EditPlane
@@ -33,7 +33,7 @@ class EditPlaneControllerSpec extends UnitSpec with TestConstants {
     )
 
     val controller: EditPlaneController = new EditPlaneController {
-      val controllerComponents: ControllerComponents = Helpers.stubControllerComponents()
+      val controllerComponents: MessagesControllerComponents = stubMessagesControllerComponents()
       val campaignService: CampaignService = mockCampaignService
       val editPlane: EditPlane = mockEditPlane
     }
@@ -44,7 +44,7 @@ class EditPlaneControllerSpec extends UnitSpec with TestConstants {
     s"return $OK" when {
       "the plane is retrieved from the campaign" in new Setup {
         when(mockCampaignService.retrieveElement(matches(campaign.id), matches(plane.id))(any())) thenReturn Future.successful(Right(plane))
-        when(mockEditPlane(matches(plane.id), any())) thenReturn emptyHtmlTag
+        when(mockEditPlane(matches(plane.id), any())(any())) thenReturn emptyHtmlTag
 
         val result: Future[Result] = controller.show(plane.id)(fakeRequestWithSession)
 
@@ -83,7 +83,7 @@ class EditPlaneControllerSpec extends UnitSpec with TestConstants {
     s"return $BAD_REQUEST" when {
       "the form had errors" in new Setup {
         when(mockCampaignService.retrieveElement(matches(campaign.id), matches(plane.id))(any())) thenReturn Future.successful(Right(plane))
-        when(mockEditPlane(matches(plane.id), any())) thenReturn emptyHtmlTag
+        when(mockEditPlane(matches(plane.id), any())(any())) thenReturn emptyHtmlTag
 
         val result: Future[Result] = controller.submit(plane.id)(fakeRequestWithSession)
 

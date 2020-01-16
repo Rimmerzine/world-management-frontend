@@ -13,7 +13,7 @@ import views.planes.CreatePlane
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CreatePlaneControllerImpl @Inject()(val controllerComponents: ControllerComponents,
+class CreatePlaneControllerImpl @Inject()(val controllerComponents: MessagesControllerComponents,
                                           val campaignService: CampaignService,
                                           val createPlane: CreatePlane) extends CreatePlaneController
 

@@ -21,9 +21,9 @@ class ErrorHandler @Inject()(val internalServerError: InternalServerError,
   def onClientError(request: RequestHeader, statusCode: Int, message: String): Future[Result] = {
     Future.successful {
       statusCode match {
-        case NOT_FOUND => Status(statusCode)(notFound())
-        case FORBIDDEN => Status(statusCode)(notFound())
-        case _ => Status(statusCode)(internalServerError())
+        case NOT_FOUND => Status(statusCode)(notFound(messagesApi.preferred(request)))
+        case FORBIDDEN => Status(statusCode)(notFound(messagesApi.preferred(request)))
+        case _ => Status(statusCode)(internalServerError(messagesApi.preferred(request)))
       }
     }
   }
@@ -31,7 +31,7 @@ class ErrorHandler @Inject()(val internalServerError: InternalServerError,
   def onServerError(request: RequestHeader, exception: Throwable): Future[Result] = {
     logger.error(s"[onServerError] Error occurred which was not recovered from. Url: ${request.uri}", exception)
     Future.successful(
-      InternalServerError(internalServerError())
+      InternalServerError(internalServerError(messagesApi.preferred(request)))
     )
   }
 }

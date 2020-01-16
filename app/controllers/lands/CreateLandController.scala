@@ -13,7 +13,7 @@ import views.lands.CreateLand
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CreateLandControllerImpl @Inject()(val controllerComponents: ControllerComponents,
+class CreateLandControllerImpl @Inject()(val controllerComponents: MessagesControllerComponents,
                                          val campaignService: CampaignService,
                                          val createLand: CreateLand) extends CreateLandController
 

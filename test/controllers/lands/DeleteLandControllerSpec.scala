@@ -5,7 +5,7 @@ import helpers.UnitSpec
 import models.ErrorModel.{CampaignNotFound, ElementNotFound, UnexpectedStatus}
 import org.mockito.ArgumentMatchers.{any, eq => matches}
 import org.mockito.Mockito.when
-import play.api.mvc.{AnyContent, ControllerComponents, Result}
+import play.api.mvc.{AnyContent, MessagesControllerComponents, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CampaignService
@@ -27,7 +27,7 @@ class DeleteLandControllerSpec extends UnitSpec with TestConstants {
     )
 
     val controller: DeleteLandController = new DeleteLandController {
-      val controllerComponents: ControllerComponents = stubControllerComponents()
+      val controllerComponents: MessagesControllerComponents = stubMessagesControllerComponents()
       val campaignService: CampaignService = mockCampaignService
       val deleteLand: DeleteLand = mockDeleteLand
     }
@@ -38,7 +38,7 @@ class DeleteLandControllerSpec extends UnitSpec with TestConstants {
     s"return $OK" when {
       "the land is retrieved from the campaign" in new Setup {
         when(mockCampaignService.retrieveElement(matches(campaign.id), matches(land.id))(any())) thenReturn Future.successful(Right(land))
-        when(mockDeleteLand(land)) thenReturn emptyHtmlTag
+        when(mockDeleteLand(matches(land))(any())) thenReturn emptyHtmlTag
 
         val result: Future[Result] = controller.show(land.id)(fakeRequestWithSession)
 

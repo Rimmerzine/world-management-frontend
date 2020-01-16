@@ -4,13 +4,13 @@ import controllers.FrontendController
 import javax.inject.Inject
 import models.ErrorModel.{CampaignNotFound, ElementNotFound}
 import models.Plane
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.CampaignService
 import views.planes.DeletePlane
 
 import scala.concurrent.ExecutionContext
 
-class DeletePlaneControllerImpl @Inject()(val controllerComponents: ControllerComponents,
+class DeletePlaneControllerImpl @Inject()(val controllerComponents: MessagesControllerComponents,
                                           val campaignService: CampaignService,
                                           val deletePlane: DeletePlane) extends DeletePlaneController
 

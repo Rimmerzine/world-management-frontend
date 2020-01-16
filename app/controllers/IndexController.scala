@@ -1,11 +1,11 @@
 package controllers
 
 import javax.inject.Inject
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 
 import scala.concurrent.Future
 
-class IndexControllerImpl @Inject()(val controllerComponents: ControllerComponents) extends IndexController
+class IndexControllerImpl @Inject()(val controllerComponents: MessagesControllerComponents) extends IndexController
 
 trait IndexController extends FrontendController {
 

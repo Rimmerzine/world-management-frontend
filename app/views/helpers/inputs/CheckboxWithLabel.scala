@@ -7,9 +7,7 @@ import scalatags.Text.all._
 
 trait CheckboxWithLabel {
 
-  val messages: Messages
-
-  def checkboxWithLabel(inputField: Field, inputLabel: String,  ariaLabel: Option[String] = None): Seq[TypedTag[String]] = {
+  def checkboxWithLabel(inputField: Field, inputLabel: String, ariaLabel: Option[String] = None)(implicit messages: Messages): Seq[TypedTag[String]] = {
     val isInvalid: String = if (inputField.hasErrors) "is-invalid" else ""
     val checkedValue = inputField.value match {
       case Some("true") => Some(checked := "checked")

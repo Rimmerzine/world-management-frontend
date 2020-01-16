@@ -2,7 +2,7 @@ package controllers
 
 import helpers.UnitSpec
 import play.api.mvc.Results.Ok
-import play.api.mvc.{AnyContent, ControllerComponents, Result}
+import play.api.mvc.{AnyContent, MessagesControllerComponents, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 
@@ -12,7 +12,7 @@ class FrontendControllerSpec extends UnitSpec {
 
   trait Setup {
     val controller: FrontendController = new FrontendController {
-      val controllerComponents: ControllerComponents = stubControllerComponents()
+      val controllerComponents: MessagesControllerComponents = stubMessagesControllerComponents()
     }
 
     val returnValue: (String, List[String]) => Future[Result] = {

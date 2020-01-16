@@ -5,29 +5,22 @@ import forms.SelectCreatureForm._
 import javax.inject.Inject
 import models.Creature
 import play.api.data.Form
-import play.api.i18n.{Langs, Messages, MessagesApi, MessagesImpl}
+import play.api.i18n.Messages
 import scalatags.Text.TypedTag
 import scalatags.Text.all._
 import views.MainTemplate
 import views.helpers.inputs.DropdownWithInlineLabel
 import views.helpers.{Card, HtmlForm}
 
-class SelectCreatureImpl @Inject()(messagesApi: MessagesApi, langs: Langs, val appConfig: AppConfig) extends SelectCreature {
-
-  lazy val messages: Messages = MessagesImpl(langs.availables.head, messagesApi)
-
-}
+class SelectCreatureImpl @Inject()(val appConfig: AppConfig) extends SelectCreature
 
 trait SelectCreature extends MainTemplate with Card with DropdownWithInlineLabel with HtmlForm {
 
-  implicit val messages: Messages
-
-  def apply(
-             selectCreatureForm: Form[(String, String)],
-             creatures: List[Creature],
-             challengeRatings: List[String],
-             nameStarts: List[String]
-           ): TypedTag[String] = {
+  def apply(selectCreatureForm: Form[(String, String)],
+            creatures: List[Creature],
+            challengeRatings: List[String],
+            nameStarts: List[String])
+           (implicit messages: Messages): TypedTag[String] = {
 
     mainTemplate(messages("select-creature.title"))(
       h1(cls := "text-center")(messages("select-creature.heading")),

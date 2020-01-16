@@ -12,7 +12,7 @@ import views.campaigns.CreateCampaign
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CreateCampaignControllerImpl @Inject()(val controllerComponents: ControllerComponents,
+class CreateCampaignControllerImpl @Inject()(val controllerComponents: MessagesControllerComponents,
                                              val campaignService: CampaignService,
                                              val createCampaign: CreateCampaign) extends CreateCampaignController
 
@@ -20,6 +20,7 @@ trait CreateCampaignController extends FrontendController {
 
   val campaignService: CampaignService
   val createCampaign: CreateCampaign
+
   val campaignForm: Form[(String, Option[String])] = CampaignForm.form
 
   implicit lazy val ec: ExecutionContext = controllerComponents.executionContext

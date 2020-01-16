@@ -7,9 +7,9 @@ import models.ErrorModel.{CampaignNotFound, UnexpectedStatus}
 import models.Plane
 import org.mockito.ArgumentMatchers.{any, eq => matches}
 import org.mockito.Mockito.when
-import play.api.mvc.{AnyContent, AnyContentAsFormUrlEncoded, ControllerComponents, Result}
+import play.api.mvc.{AnyContent, AnyContentAsFormUrlEncoded, MessagesControllerComponents, Result}
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import play.api.test.{FakeRequest, Helpers}
 import services.CampaignService
 import testutil.TestConstants
 import views.planes.CreatePlane
@@ -32,7 +32,7 @@ class CreatePlaneControllerSpec extends UnitSpec with TestConstants {
     )
 
     val controller: CreatePlaneController = new CreatePlaneController {
-      val controllerComponents: ControllerComponents = Helpers.stubControllerComponents()
+      val controllerComponents: MessagesControllerComponents = stubMessagesControllerComponents()
       val campaignService: CampaignService = mockCampaignService
       val createPlane: CreatePlane = mockCreatePlane
     }
@@ -41,7 +41,7 @@ class CreatePlaneControllerSpec extends UnitSpec with TestConstants {
 
   "show" must {
     s"return $OK" in new Setup {
-      when(mockCreatePlane(any())) thenReturn emptyHtmlTag
+      when(mockCreatePlane(any())(any())) thenReturn emptyHtmlTag
 
       val result: Future[Result] = controller.show()(fakeRequest)
 
@@ -53,7 +53,7 @@ class CreatePlaneControllerSpec extends UnitSpec with TestConstants {
   "submit" must {
     s"return $BAD_REQUEST" when {
       "the form has errors" in new Setup {
-        when(mockCreatePlane(any())) thenReturn emptyHtmlTag
+        when(mockCreatePlane(any())(any())) thenReturn emptyHtmlTag
 
         val result: Future[Result] = controller.submit()(fakeRequest)
 

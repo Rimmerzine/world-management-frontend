@@ -7,9 +7,7 @@ import scalatags.Text.all._
 
 trait InputTextNoLabel {
 
-  val messages: Messages
-
-  def inputTextNoLabel(inputField: Field, ariaLabel: Option[String] = None): Seq[TypedTag[String]] = {
+  def inputTextNoLabel(inputField: Field, ariaLabel: Option[String] = None)(implicit messages: Messages): Seq[TypedTag[String]] = {
     val isInvalid: String = if (inputField.hasErrors) "is-invalid" else ""
     Seq(
       input(

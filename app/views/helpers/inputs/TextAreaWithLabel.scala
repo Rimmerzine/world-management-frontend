@@ -7,9 +7,7 @@ import scalatags.Text.all._
 
 trait TextAreaWithLabel {
 
-  val messages: Messages
-
-  def textAreaWithLabel(inputField: Field, inputLabel: String, ariaLabel: Option[String] = None): Seq[TypedTag[String]] = {
+  def textAreaWithLabel(inputField: Field, inputLabel: String, ariaLabel: Option[String] = None)(implicit messages: Messages): Seq[TypedTag[String]] = {
     val isInvalid: String = if (inputField.hasErrors) "is-invalid" else ""
     Seq(
       label(`for` := inputField.id, ariaLabel.map(aria.label := _))(inputLabel),

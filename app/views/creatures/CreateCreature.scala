@@ -6,7 +6,7 @@ import forms._
 import javax.inject.Inject
 import models.CreatureDetail
 import play.api.data.{Field, Form}
-import play.api.i18n.{Langs, Messages, MessagesApi, MessagesImpl}
+import play.api.i18n.Messages
 import scalatags.Text.TypedTag
 import scalatags.Text.all._
 import scalatags.Text.tags2.{details, summary}
@@ -14,11 +14,7 @@ import views.MainTemplate
 import views.helpers.HtmlForm
 import views.helpers.inputs._
 
-class CreateCreatureImpl @Inject()(messagesApi: MessagesApi, langs: Langs, val appConfig: AppConfig) extends CreateCreature {
-
-  lazy val messages: Messages = MessagesImpl(langs.availables.head, messagesApi)
-
-}
+class CreateCreatureImpl @Inject()(val appConfig: AppConfig) extends CreateCreature
 
 trait CreateCreature extends MainTemplate
   with InputTextWithLabel
@@ -28,8 +24,6 @@ trait CreateCreature extends MainTemplate
   with RadioButtonNoLabel
   with DropdownWithLabel
   with HtmlForm {
-
-  implicit val messages: Messages
 
   def multipleInput(field: Field)(inputField: Field => TypedTag[String]): Seq[TypedTag[String]] = {
 
@@ -42,58 +36,58 @@ trait CreateCreature extends MainTemplate
 
   }
 
-  private def creatureNameDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  private def creatureNameDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     div(cls := "form-group")(
       inputTextWithLabel(creatureForm(creatureName), messages("create-creature.name"), Some(messages("create-creature.name-aria")))
     )
   }
 
-  private def creatureDescriptionDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  private def creatureDescriptionDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     div(cls := "form-group")(
       textAreaWithLabel(creatureForm(creatureDescription), messages("create-creature.description"), Some(messages("create-creature.description-aria")))
     )
   }
 
-  private def creatureSizeDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  private def creatureSizeDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     val options: List[(String, String)] = Sizes.options.map(size => (size, messages(s"size.$size")))
     div(cls := "col-xl-4 form-group")(
       dropdownWithLabel(creatureForm(creatureSize), options, messages("create-creature.size"), Some(messages("create-creature.size-aria")), includeSelectOption = true)
     )
   }
 
-  private def creatureAlignmentDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  private def creatureAlignmentDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     val options: List[(String, String)] = Alignments.options.map(alignment => (alignment, messages(s"alignment.$alignment")))
     div(cls := "col-xl-4 form-group")(
       dropdownWithLabel(creatureForm(creatureAlignment), options, messages("create-creature.alignment"), Some(messages("create-creature.alignment-aria")), includeSelectOption = true)
     )
   }
 
-  private def creatureArmourClassDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  private def creatureArmourClassDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     div(cls := "col-xl-4 form-group")(
       inputTextWithLabel(creatureForm(creatureArmourClass), messages("create-creature.armour-class"), Some(messages("create-creature.armour-class-aria")))
     )
   }
 
-  private def creatureHitPointsDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  private def creatureHitPointsDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     div(cls := "col-xl-4 form-group")(
       inputTextWithLabel(creatureForm(creatureHitPoints), messages("create-creature.hit-points"), Some(messages("create-creature.hit-points-aria")))
     )
   }
 
-  private def creatureChallengeRatingDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  private def creatureChallengeRatingDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     div(cls := "col-xl-4 form-group")(
       inputTextWithLabel(creatureForm(creatureChallengeRating), messages("create-creature.challenge-rating"), Some(messages("create-creature.challenge-rating-aria")))
     )
   }
 
-  private def creatureTypeDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  private def creatureTypeDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     val options: List[(String, String)] = Types.options.map(creatureType => (creatureType, messages(s"type.$creatureType")))
     div(cls := "col-xl-4 form-group")(
       dropdownWithLabel(creatureForm(creatureType), options, messages("create-creature.type"), Some(messages("create-creature.type-aria")), includeSelectOption = true)
     )
   }
 
-  private def creatureTypeTagsDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  private def creatureTypeTagsDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     div(cls := "form-group", role := "group", aria.labelledby := "type-tags-heading")(
       h3(cls := "header-medium", id := "type-tags-heading")(messages("create-creature.type-tag.heading")),
       details(
@@ -116,7 +110,7 @@ trait CreateCreature extends MainTemplate
     )
   }
 
-  private def creatureMovementSpeedDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  private def creatureMovementSpeedDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     div(role := "group", aria.labelledby := "speed-heading")(
       h3(cls := "header-medium", id := "speed-heading", aria.label := "create-creature.speed.heading-aria")(messages("create-creature.speed.heading")),
       div(cls := "row")(
@@ -133,7 +127,7 @@ trait CreateCreature extends MainTemplate
     )
   }
 
-  private def creatureAbilityScoreDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  private def creatureAbilityScoreDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     div(role := "group", aria.labelledby := "ability-scores-heading")(
       h3(cls := "header-medium", id := "ability-scores-heading")(messages("create-creature.ability-scores.heading")),
       div(cls := "row")(
@@ -150,7 +144,7 @@ trait CreateCreature extends MainTemplate
     )
   }
 
-  private def creatureSavingThrowDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  private def creatureSavingThrowDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     div(cls := "form-group", role := "group", aria.labelledby := "saving-throws-heading")(
       h3(cls := "header-medium", id := "saving-throws-heading")(messages("create-creature.saving-throws.heading")),
       div(cls := "row")(
@@ -169,7 +163,7 @@ trait CreateCreature extends MainTemplate
     )
   }
 
-  private def creatureSkillProficiencyDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  private def creatureSkillProficiencyDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     div(cls := "form-group", role := "group", aria.labelledby := "skill-proficiency-heading")(
       h3(cls := "header-medium", id := "skill-proficiency-heading")(messages("create-creature.skill-proficiency.heading")),
       div(cls := "row bold table-row")(
@@ -196,7 +190,7 @@ trait CreateCreature extends MainTemplate
     )
   }
 
-  def creatureResistanceDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  def creatureResistanceDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     div(cls := "form-group", role := "group", aria.labelledby := "resistances-heading")(
       h3(cls := "header-medium", id := "resistances-heading")(messages("create-creature.resistances.heading")),
       div(cls := "row bold table-row")(
@@ -224,7 +218,7 @@ trait CreateCreature extends MainTemplate
     )
   }
 
-  private def creatureConditionDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  private def creatureConditionDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     div(cls := "form-group", role := "group", aria.labelledby := "conditions-heading")(
       h3(cls := "header-medium", id := "conditions-heading")(messages("create-creature.conditions.heading")),
       div(cls := "row")(
@@ -243,7 +237,7 @@ trait CreateCreature extends MainTemplate
     )
   }
 
-  private def creatureSenseDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  private def creatureSenseDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     div(role := "group", aria.labelledby := "senses-heading")(
       h3(cls := "header-medium", id := "senses-heading", aria.label := messages("create-creature.senses.heading-aria"))(
         messages("create-creature.senses.heading")
@@ -262,7 +256,7 @@ trait CreateCreature extends MainTemplate
     )
   }
 
-  private def creatureLanguageDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  private def creatureLanguageDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     div(cls := "form-group", role := "group", aria.labelledby := "languages-heading")(
       h3(cls := "header-medium", id := "languages-heading")(messages("create-creature.languages.heading")),
       div(cls := "row", id := "language-group")(
@@ -281,7 +275,7 @@ trait CreateCreature extends MainTemplate
     )
   }
 
-  private def creatureTraitDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  private def creatureTraitDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
 
     val traitNames = multipleInput(creatureForm(traitName))(field =>
       div(cls := "col-xl-4 form-group")(
@@ -322,7 +316,7 @@ trait CreateCreature extends MainTemplate
     )
   }
 
-  private def creatureActionDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  private def creatureActionDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     div(cls := "form-group", role := "group", aria.labelledby := "actions-heading")(
       h3(cls := "header-medium", id := "actions-heading")(messages("create-creature.actions.heading")),
       div(id := "action-group")(
@@ -352,7 +346,7 @@ trait CreateCreature extends MainTemplate
     )
   }
 
-  private def creatureLegendaryActionDisplay(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  private def creatureLegendaryActionDisplay(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     div(cls := "form-group", role := "group", aria.labelledby := "legendary-actions-heading")(
       h3(cls := "header-medium", id := "legendary-actions-heading")(messages("create-creature.legendary-actions.heading")),
       div(id := "legendary-action-group")(
@@ -382,7 +376,7 @@ trait CreateCreature extends MainTemplate
     )
   }
 
-  def apply(creatureForm: Form[CreatureDetail]): TypedTag[String] = {
+  def apply(creatureForm: Form[CreatureDetail])(implicit messages: Messages): TypedTag[String] = {
     mainTemplate(pageTitle = messages("create-creature.title"), contentWidth = twoThirdsWidth)(
       h1(messages("create-creature.heading")),
       h2(messages("create-creature.subheading")),

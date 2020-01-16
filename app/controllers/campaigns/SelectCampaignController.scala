@@ -3,13 +3,13 @@ package controllers.campaigns
 import controllers.FrontendController
 import controllers.utils.SessionKeys
 import javax.inject.Inject
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import services.CampaignService
 import views.campaigns.SelectCampaign
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class SelectCampaignControllerImpl @Inject()(val controllerComponents: ControllerComponents,
+class SelectCampaignControllerImpl @Inject()(val controllerComponents: MessagesControllerComponents,
                                              val campaignService: CampaignService,
                                              val selectCampaign: SelectCampaign) extends SelectCampaignController
 

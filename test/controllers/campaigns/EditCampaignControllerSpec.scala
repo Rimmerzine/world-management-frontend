@@ -5,7 +5,7 @@ import helpers.UnitSpec
 import models.ErrorModel.{CampaignNotFound, UnexpectedStatus}
 import org.mockito.ArgumentMatchers.{any, eq => matches}
 import org.mockito.Mockito.when
-import play.api.mvc.{AnyContentAsFormUrlEncoded, ControllerComponents, Result}
+import play.api.mvc.{AnyContentAsFormUrlEncoded, MessagesControllerComponents, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CampaignService
@@ -22,7 +22,7 @@ class EditCampaignControllerSpec extends UnitSpec with TestConstants {
     val mockEditCampaign: EditCampaign = mock[EditCampaign]
 
     val controller: EditCampaignController = new EditCampaignController {
-      val controllerComponents: ControllerComponents = stubControllerComponents()
+      val controllerComponents: MessagesControllerComponents = stubMessagesControllerComponents()
       val campaignService: CampaignService = mockCampaignService
       val editCampaign: EditCampaign = mockEditCampaign
     }
@@ -33,7 +33,7 @@ class EditCampaignControllerSpec extends UnitSpec with TestConstants {
     s"return $OK" when {
       "a campaign was returned from the service" in new Setup {
         when(mockCampaignService.retrieveCampaign(matches(campaign.id))(any())) thenReturn Future.successful(Right(campaign))
-        when(mockEditCampaign(any(), matches(campaign.id))) thenReturn emptyHtmlTag
+        when(mockEditCampaign(any(), matches(campaign.id))(any())) thenReturn emptyHtmlTag
 
         val result: Future[Result] = controller.show(campaign.id)(FakeRequest())
         status(result) mustBe OK
@@ -133,7 +133,7 @@ class EditCampaignControllerSpec extends UnitSpec with TestConstants {
     s"return $BAD_REQUEST" when {
       "the form had errors" in new Setup {
         when(mockCampaignService.retrieveCampaign(matches(campaign.id))(any())) thenReturn Future.successful(Right(campaign))
-        when(mockEditCampaign(any(), matches(campaign.id))) thenReturn emptyHtmlTag
+        when(mockEditCampaign(any(), matches(campaign.id))(any())) thenReturn emptyHtmlTag
 
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = FakeRequest().withFormUrlEncodedBody()
         val result: Future[Result] = controller.submit(campaign.id)(request)

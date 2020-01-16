@@ -5,7 +5,7 @@ import helpers.UnitSpec
 import models.ErrorModel.{CampaignNotFound, ElementNotFound, UnexpectedStatus}
 import org.mockito.ArgumentMatchers.{any, eq => matches}
 import org.mockito.Mockito.when
-import play.api.mvc.{AnyContent, AnyContentAsFormUrlEncoded, ControllerComponents, Result}
+import play.api.mvc.{AnyContent, AnyContentAsFormUrlEncoded, MessagesControllerComponents, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CampaignService
@@ -32,7 +32,7 @@ class EditLandControllerSpec extends UnitSpec with TestConstants {
     )
 
     val controller: EditLandController = new EditLandController {
-      val controllerComponents: ControllerComponents = stubControllerComponents()
+      val controllerComponents: MessagesControllerComponents = stubMessagesControllerComponents()
       val campaignService: CampaignService = mockCampaignService
       val editLand: EditLand = mockEditLand
     }
@@ -43,7 +43,7 @@ class EditLandControllerSpec extends UnitSpec with TestConstants {
     s"return $OK" when {
       "the land is retrieved from the campaign" in new Setup {
         when(mockCampaignService.retrieveElement(matches(campaign.id), matches(land.id))(any())) thenReturn Future.successful(Right(land))
-        when(mockEditLand(matches(land.id), any())) thenReturn emptyHtmlTag
+        when(mockEditLand(matches(land.id), any())(any())) thenReturn emptyHtmlTag
 
         val result: Future[Result] = controller.show(land.id)(fakeRequestWithSession)
 
@@ -82,7 +82,7 @@ class EditLandControllerSpec extends UnitSpec with TestConstants {
     s"return $BAD_REQUEST" when {
       "the form had errors" in new Setup {
         when(mockCampaignService.retrieveElement(matches(campaign.id), matches(land.id))(any())) thenReturn Future.successful(Right(land))
-        when(mockEditLand(matches(land.id), any())) thenReturn emptyHtmlTag
+        when(mockEditLand(matches(land.id), any())(any())) thenReturn emptyHtmlTag
 
         val result: Future[Result] = controller.submit(land.id)(fakeRequestWithSession)
 

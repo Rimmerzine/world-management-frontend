@@ -2,9 +2,9 @@ package controllers.campaigns
 
 import helpers.UnitSpec
 import models.ErrorModel.UnexpectedStatus
-import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.{any, eq => matches}
 import org.mockito.Mockito.when
-import play.api.mvc.{ControllerComponents, Result}
+import play.api.mvc.{MessagesControllerComponents, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.CampaignService
@@ -21,7 +21,7 @@ class SelectCampaignControllerSpec extends UnitSpec with TestConstants {
     val mockSelectCampaign: SelectCampaign = mock[SelectCampaign]
 
     val controller: SelectCampaignController = new SelectCampaignController {
-      val controllerComponents: ControllerComponents = stubControllerComponents()
+      val controllerComponents: MessagesControllerComponents = stubMessagesControllerComponents()
       val campaignService: CampaignService = mockCampaignService
       val selectCampaign: SelectCampaign = mockSelectCampaign
     }
@@ -32,7 +32,7 @@ class SelectCampaignControllerSpec extends UnitSpec with TestConstants {
     s"return $OK and remove the journey key" when {
       "campaigns are returned from the service" in new Setup {
         when(mockCampaignService.retrieveAllCampaigns(any())) thenReturn Future.successful(Right(List(campaign, campaign)))
-        when(mockSelectCampaign(List(campaign, campaign))) thenReturn emptyHtmlTag
+        when(mockSelectCampaign(matches(List(campaign, campaign)))(any())) thenReturn emptyHtmlTag
 
         val result: Future[Result] = controller.show(FakeRequest().withSession("journey" -> "testJourney"))
         status(result) mustBe OK
