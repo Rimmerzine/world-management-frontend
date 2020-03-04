@@ -2,7 +2,6 @@ package controllers
 
 import controllers.utils.{SessionKeys, WritableTag}
 import play.api.Logging
-import play.api.i18n.I18nSupport
 import play.api.mvc._
 
 import scala.concurrent.Future

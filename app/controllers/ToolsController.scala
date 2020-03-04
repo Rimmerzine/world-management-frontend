@@ -15,7 +15,7 @@ trait ToolsController extends FrontendController {
   implicit lazy val ec: ExecutionContext = controllerComponents.executionContext
 
   def show(): Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(tools(implicitly)))
+    Future.successful(Ok(tools()))
   }
 
 }

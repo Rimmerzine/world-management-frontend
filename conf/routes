@@ -65,5 +65,5 @@ POST        /dnd-world-management/create-creature                    controllers
 #POST    /dnd-world-management/edit-creature                         controllers.creatures.EditCreatureController.submit()
 
 # Delete Creature
-#GET     /dnd-world-management/edit-creature                         controllers.creatures.DeleteCreatureController.show()
-#POST    /dnd-world-management/edit-creature                         controllers.creatures.DeleteCreatureController.submit()
+#GET     /dnd-world-management/delete-creature/:creatureId           controllers.creatures.DeleteCreatureController.show(creatureId)
+#POST    /dnd-world-management/delete-creature/:creatureId           controllers.creatures.DeleteCreatureController.submit(creatureId)

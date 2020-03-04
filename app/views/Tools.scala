@@ -13,7 +13,7 @@ trait Tools extends MainTemplate with Card {
 
   val appConfig: AppConfig
 
-  def apply(implicit messages: Messages): TypedTag[String] = {
+  def apply()(implicit messages: Messages): TypedTag[String] = {
     mainTemplate(messages("tools.title"))(
       h1(cls := "text-center")(messages("tools.heading")),
       div(cls := "row")(

@@ -4,7 +4,7 @@ import java.util.UUID
 
 import play.api.libs.json.{JsPath, Json, OFormat, Reads, _}
 
-case class Campaign(elementType: String,
+case class Campaign(elementType: String = "campaign",
                     id: String,
                     name: String,
                     description: Option[String],
@@ -23,7 +23,7 @@ object Campaign {
   }
 }
 
-case class Plane(elementType: String,
+case class Plane(elementType: String = "plane",
                  id: String,
                  name: String,
                  description: Option[String],
@@ -43,7 +43,7 @@ object Plane {
   }
 }
 
-case class Land(elementType: String,
+case class Land(elementType: String = "land",
                 id: String,
                 name: String,
                 description: Option[String],
@@ -64,11 +64,15 @@ object Land {
 
 sealed trait WorldElement {
 
-  val elementType: String
-  val id: String
-  val name: String
-  val description: Option[String]
-  val content: List[WorldElement]
+  def elementType: String
+
+  def id: String
+
+  def name: String
+
+  def description: Option[String]
+
+  def content: List[WorldElement]
 
   def replace(elementId: String, element: WorldElement): WorldElement = {
     if (elementId == id) element else this.updateContent(replacement = content.map(_.replace(elementId, element)))
